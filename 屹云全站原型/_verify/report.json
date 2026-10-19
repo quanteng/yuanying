@@ -1,0 +1,387 @@
+{
+  "generated_at": "2026-10-19T12:11:05.550Z",
+  "passed": 76,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "handoff hub renders",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "handoff hub has four entries",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "handoff hub lists every admin view",
+      "ok": true,
+      "detail": "21 unique links"
+    },
+    {
+      "name": "handoff hub preview images load",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "handoff hub has no browser errors",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "official index.html renders",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "official index.html reveals all sections",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "official index.html has no browser errors",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "official showcase.html renders",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "official showcase.html reveals all sections",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "official showcase.html has no browser errors",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "user route home",
+      "ok": true,
+      "detail": "content length 653"
+    },
+    {
+      "name": "user route tools",
+      "ok": true,
+      "detail": "content length 1031"
+    },
+    {
+      "name": "user route tool/boundary",
+      "ok": true,
+      "detail": "content length 295"
+    },
+    {
+      "name": "user route datasets",
+      "ok": true,
+      "detail": "content length 266"
+    },
+    {
+      "name": "user route dataset/survey-points",
+      "ok": true,
+      "detail": "content length 515"
+    },
+    {
+      "name": "user route requests",
+      "ok": true,
+      "detail": "content length 348"
+    },
+    {
+      "name": "user route pricing",
+      "ok": true,
+      "detail": "content length 1461"
+    },
+    {
+      "name": "user route help",
+      "ok": true,
+      "detail": "content length 767"
+    },
+    {
+      "name": "user route about",
+      "ok": true,
+      "detail": "content length 855"
+    },
+    {
+      "name": "user route terms",
+      "ok": true,
+      "detail": "content length 2933"
+    },
+    {
+      "name": "user route privacy",
+      "ok": true,
+      "detail": "content length 1897"
+    },
+    {
+      "name": "user route account/entitlements",
+      "ok": true,
+      "detail": "content length 270"
+    },
+    {
+      "name": "user route account/profile",
+      "ok": true,
+      "detail": "content length 132"
+    },
+    {
+      "name": "user route account/security",
+      "ok": true,
+      "detail": "content length 177"
+    },
+    {
+      "name": "user route account/orders",
+      "ok": true,
+      "detail": "content length 164"
+    },
+    {
+      "name": "user route account/invoices",
+      "ok": true,
+      "detail": "content length 208"
+    },
+    {
+      "name": "user routes have no browser errors",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "auth route login",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "auth route register",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "auth route forgot",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "admin route tools",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "admin route tags",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "admin route labels",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "admin route tool_media",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "admin route tool_updates",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "admin route tool_docs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "admin route datasets",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "admin route help",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "admin route requests",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "admin route site",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "admin route products",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "admin route billing_plans",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "admin route coupons",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "admin route users",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "admin route sites",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "admin route feedback",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "admin route orders",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "admin route invoices",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "admin route refunds",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "admin route policies",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "admin route stats",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "admin routes have no browser errors",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "scenario share modal",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "scenario request modal",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "scenario purchase pay sheet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "scenario pay method modal",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "scenario VIP modal",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "scenario price confirm modal",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "scenario password dialog",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "scenario email dialog",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "scenario wechat bind QR",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "scenario deactivate modal",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "scenario refund modal",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "purchase completion state",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "scenario checks have no browser errors",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "boundary map initializes",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "boundary sample preview",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "boundary region autofill",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "boundary output download",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "boundary completion log",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "boundary has no browser errors",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile navigation drawer",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile route has no browser errors",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile admin avoids page-level horizontal scroll",
+      "ok": true,
+      "detail": "{\"scroll\":390,\"client\":390}"
+    },
+    {
+      "name": "mobile admin route has no browser errors",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}

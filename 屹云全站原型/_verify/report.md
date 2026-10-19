@@ -1,0 +1,81 @@
+# Prototype verification
+
+- Passed: 76
+- Failed: 0
+
+- PASS handoff hub renders
+- PASS handoff hub has four entries
+- PASS handoff hub lists every admin view — 21 unique links
+- PASS handoff hub preview images load
+- PASS handoff hub has no browser errors
+- PASS official index.html renders
+- PASS official index.html reveals all sections
+- PASS official index.html has no browser errors
+- PASS official showcase.html renders
+- PASS official showcase.html reveals all sections
+- PASS official showcase.html has no browser errors
+- PASS user route home — content length 653
+- PASS user route tools — content length 1031
+- PASS user route tool/boundary — content length 295
+- PASS user route datasets — content length 266
+- PASS user route dataset/survey-points — content length 515
+- PASS user route requests — content length 348
+- PASS user route pricing — content length 1461
+- PASS user route help — content length 767
+- PASS user route about — content length 855
+- PASS user route terms — content length 2933
+- PASS user route privacy — content length 1897
+- PASS user route account/entitlements — content length 270
+- PASS user route account/profile — content length 132
+- PASS user route account/security — content length 177
+- PASS user route account/orders — content length 164
+- PASS user route account/invoices — content length 208
+- PASS user routes have no browser errors
+- PASS auth route login
+- PASS auth route register
+- PASS auth route forgot
+- PASS admin route tools
+- PASS admin route tags
+- PASS admin route labels
+- PASS admin route tool_media
+- PASS admin route tool_updates
+- PASS admin route tool_docs
+- PASS admin route datasets
+- PASS admin route help
+- PASS admin route requests
+- PASS admin route site
+- PASS admin route products
+- PASS admin route billing_plans
+- PASS admin route coupons
+- PASS admin route users
+- PASS admin route sites
+- PASS admin route feedback
+- PASS admin route orders
+- PASS admin route invoices
+- PASS admin route refunds
+- PASS admin route policies
+- PASS admin route stats
+- PASS admin routes have no browser errors
+- PASS scenario share modal
+- PASS scenario request modal
+- PASS scenario purchase pay sheet
+- PASS scenario pay method modal
+- PASS scenario VIP modal
+- PASS scenario price confirm modal
+- PASS scenario password dialog
+- PASS scenario email dialog
+- PASS scenario wechat bind QR
+- PASS scenario deactivate modal
+- PASS scenario refund modal
+- PASS purchase completion state
+- PASS scenario checks have no browser errors
+- PASS boundary map initializes
+- PASS boundary sample preview
+- PASS boundary region autofill
+- PASS boundary output download
+- PASS boundary completion log
+- PASS boundary has no browser errors
+- PASS mobile navigation drawer
+- PASS mobile route has no browser errors
+- PASS mobile admin avoids page-level horizontal scroll — {"scroll":390,"client":390}
+- PASS mobile admin route has no browser errors

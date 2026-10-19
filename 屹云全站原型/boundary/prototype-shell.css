@@ -1,0 +1,66 @@
+.proto-boundary-dock {
+  position: fixed;
+  left: 18px;
+  bottom: 18px;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid rgba(111, 166, 255, .28);
+  border-radius: 13px;
+  background: rgba(15, 23, 38, .94);
+  box-shadow: 0 16px 38px rgba(2, 6, 23, .5);
+  backdrop-filter: blur(14px);
+  font-family: "Microsoft YaHei", "Segoe UI", sans-serif;
+}
+
+.proto-boundary-dock__label {
+  padding: 0 8px;
+  color: #9dafc6;
+  font: 700 10px/1 ui-monospace, SFMono-Regular, Consolas, monospace;
+  letter-spacing: .06em;
+}
+
+.proto-boundary-dock a,
+.proto-boundary-dock button {
+  min-height: 32px;
+  padding: 0 10px;
+  border: 1px solid #34435d;
+  border-radius: 8px;
+  background: #182236;
+  color: #e8eff9;
+  font: inherit;
+  font-size: 11px;
+  line-height: 30px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.proto-boundary-dock button:hover,
+.proto-boundary-dock a:hover {
+  border-color: #6fa6ff;
+  background: #1d2c48;
+}
+
+.proto-boundary-dock button.is-primary {
+  border-color: #6fa6ff;
+  background: #5296ff;
+  color: #fff;
+}
+
+.proto-boundary-dock button.is-danger {
+  color: #ffd5d1;
+}
+
+@media (max-width: 760px) {
+  .proto-boundary-dock {
+    left: 10px;
+    bottom: 10px;
+    max-width: calc(100vw - 20px);
+    overflow-x: auto;
+  }
+  .proto-boundary-dock__label {
+    display: none;
+  }
+}

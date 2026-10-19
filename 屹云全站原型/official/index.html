@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>屹云科技 | 调查成果可视化服务商</title>
+  <meta
+    name="description"
+    content="北京屹云科技有限公司聚焦污染场地调查与环境修复，提供数据处理、专题制图、三维建模、成果交付支持与在线工具平台（FigHub）。"
+  >
+  <link rel="icon" type="image/svg+xml" href="./images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/logo/rgb-mark-32.png">
+  <link rel="apple-touch-icon" href="./images/logo/rgb-avatar-180.png">
+  <meta name="theme-color" content="#5296FF">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="屹云科技 | 调查成果可视化服务商">
+  <meta property="og:description" content="从数据整理、专题制图到成果包交付，为环境调查项目提供一站式成果制作服务。">
+  <meta property="og:url" content="https://www.bjyiyunkeji.online/">
+  <meta property="og:image" content="https://www.bjyiyunkeji.online/images/og-cover.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="北京屹云科技有限公司">
+  <meta property="og:locale" content="zh_CN">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./prototype-overrides.css">
+  <noscript><style>.reveal { opacity: 1; transform: none; }</style></noscript>
+</head>
+<body>
+  <div class="site-shell">
+    <header class="header" id="header">
+      <div class="container header__inner">
+        <a class="brand" href="#hero" aria-label="屹云科技首页">
+          <img class="brand__mark" src="./images/logo/rgb-mark-96.png" alt="">
+          <span class="brand__text">
+            <strong>屹云科技</strong>
+            <small>调查成果可视化服务商</small>
+          </span>
+        </a>
+
+        <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="siteNav">
+          <span></span>
+          <span></span>
+        </button>
+
+        <nav class="nav" id="siteNav" aria-label="主导航">
+          <a href="#about">关于我们</a>
+          <a href="#solutions">核心服务</a>
+          <a href="#product">在线工具</a>
+          <a href="#cases">项目案例</a>
+          <a href="#cooperation">合作方式</a>
+          <a href="#contact">联系我们</a>
+        </nav>
+
+        <div class="header__actions">
+          <a class="button button--primary" href="../fighub/index.html" target="_blank" rel="noopener noreferrer">打开 FigHub</a>
+          <a class="button button--secondary" href="#contact">沟通需求</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+          <!-- 首屏：实景照片 + 成果卡（方案 A） -->
+      <section class="hero hero--photo hero--fusion" id="hero">
+        <div class="hero__bg" aria-hidden="true">
+          <picture>
+            <source media="(max-width: 640px)" srcset="./images/hero-3-mobile.webp">
+            <img src="./images/hero-3.webp" alt="" fetchpriority="high">
+          </picture>
+          <span class="hero__bg-scrim"></span>
+        </div>
+        <div class="container hero__fusion">
+          <div class="hero__copy">
+            <span class="eyebrow">聚焦污染场地调查</span>
+            <h1><span class="hero__line">调查数据</span><br><span class="hero__line">转化为报告专题图表</span></h1>
+            <p class="hero__lead">数据整理、专题制图、成果包交付，一站式产出可直接用于评审的成果。</p>
+
+            <div class="hero__actions">
+              <a class="button button--primary button--large" href="../fighub/index.html" target="_blank" rel="noopener noreferrer">打开 FigHub</a>
+              <a class="button button--secondary button--large" href="#contact">沟通需求</a>
+            </div>
+
+            <ul class="hero__stats">
+              <li><strong>50+</strong><span>项目验证</span></li>
+              <li><strong>10 年</strong><span>数据处理经验</span></li>
+              <li><strong>2018</strong><span>年成立</span></li>
+            </ul>
+          </div>
+
+          <aside class="hero__card hero__card--drawer" id="heroCard" aria-label="图件示例">
+            <span class="hero__card-handle" aria-hidden="true">图件示例</span>
+            <img
+              class="hero__card-main"
+              src="./images/deliverables/model-3d.webp"
+              alt="三维地层与污染模型"
+              width="1500"
+              height="734"
+              loading="lazy"
+              decoding="async"
+            >
+            <div class="hero__card-strip">
+              <figure>
+                <img src="./images/deliverables/map-exceed-samples.webp" alt="超标样品分布图" width="900" height="600" loading="lazy" decoding="async">
+                <figcaption>超标样品分布图</figcaption>
+              </figure>
+              <figure>
+                <img src="./images/deliverables/map-grade.webp" alt="污染浓度分级图" width="900" height="600" loading="lazy" decoding="async">
+                <figcaption>污染浓度分级图</figcaption>
+              </figure>
+              <figure>
+                <img src="./images/deliverables/map-exceed-extent.webp" alt="超标范围拐点图" width="900" height="600" loading="lazy" decoding="async">
+                <figcaption>超标范围拐点图</figcaption>
+              </figure>
+            </div>
+          </aside>
+        </div>
+
+        <div class="hero__drawer-zone" aria-hidden="true"></div>
+      </section>
+
+      <section class="section proof" id="about">
+        <div class="container">
+          <div class="about-editorial reveal">
+            <div class="about-labels">
+              <p class="about-eyebrow">关于我们</p>
+              <span class="about-labels__rule about-labels__rule--left" aria-hidden="true"></span>
+              <p class="about-bridge">以专业和责任心服务每一位客户</p>
+              <span class="about-labels__rule about-labels__rule--right" aria-hidden="true"></span>
+              <h3 class="about-eyebrow about-eyebrow--service">服务客户</h3>
+            </div>
+
+            <div class="about-editorial__intro">
+              <h2>北京屹云科技有限公司</h2>
+              <p>成立于 2018 年，聚焦污染场地调查与环境修复，提供数据处理、专题制图、三维建模与成果交付支持；团队拥有 10 年以上数据处理经验，长期服务科研院所、环科院系统与高校团队。</p>
+              <p class="about-editorial__note">懂 GIS、懂场调数据结构、懂报告表达与成果交付。</p>
+            </div>
+            <div class="trust-strip">
+              <div class="trust-strip__list">
+                <div class="trust-strip__row">
+                  <span><img class="partner-logo" src="./images/partners/tcare.png" alt="生态环境部土壤与农业农村生态环境监管技术中心" loading="lazy" decoding="async"></span>
+                  <span><img class="partner-logo" src="./images/partners/irebjast.png" alt="轻工业环境保护研究所（北京市科学技术研究院资源环境研究所）" loading="lazy" decoding="async"></span>
+                </div>
+                <div class="trust-strip__row">
+                  <span><img class="partner-logo" src="./images/partners/craes.png" alt="中国环境科学研究院" loading="lazy" decoding="async"></span>
+                  <span><img class="partner-logo" src="./images/partners/bjhkys.webp" alt="北京市环境保护科学研究院" loading="lazy" decoding="async"></span>
+                  <span><img class="partner-logo" src="./images/partners/saes.webp" alt="山东省环科院股份有限公司" loading="lazy" decoding="async"></span>
+                </div>
+                <div class="trust-strip__row">
+                  <span><img class="partner-logo" src="./images/partners/ncwu.webp" alt="华北水利水电大学" loading="lazy" decoding="async"></span>
+                  <span><img class="partner-logo" src="./images/partners/tynu.png" alt="太原师范学院" loading="lazy" decoding="async"></span>
+                  <span><img class="partner-logo" src="./images/partners/yonker.png" alt="永清环保" loading="lazy" decoding="async"></span>
+                  <span><img class="partner-logo" src="./images/partners/als.png" alt="苏伊士环境检测技术（北京）有限公司（ALS）" loading="lazy" decoding="async"></span>
+                </div>
+              </div>
+              <p class="trust-strip__foot">名单持续更新；部分合作受保密约定，未在此列出。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      
+      <section class="section solutions" id="solutions">
+        <div class="container">
+          <div class="section-heading reveal">
+            <h2>污染调查项目，一站式成果制作</h2>
+            <p>您提供项目资料与检测数据，我们完成整理、制图与打包，成果可直接用于评审。</p>
+          </div>
+
+          <div class="service-steps reveal">
+            <div class="service-step">
+              <span class="service-step__num">01</span>
+              <h3 class="service-step__title">交给我们的资料</h3>
+              <ul>
+                <li>地块边界、坐标系与底图</li>
+                <li>钻孔、土层与样品数据</li>
+                <li>检测因子、标准值与超标判定</li>
+                <li>报告图件与交付要求</li>
+              </ul>
+            </div>
+            <div class="service-step">
+              <span class="service-step__num">02</span>
+              <h3 class="service-step__title">我们完成的处理</h3>
+              <ul>
+                <li>数据清洗与规范化建库</li>
+                <li>专题图件成套制作</li>
+                <li>三维建模与可视化增强</li>
+                <li>配合评审修改与补充</li>
+              </ul>
+            </div>
+            <div class="service-step">
+              <span class="service-step__num">03</span>
+              <h3 class="service-step__title">您收到的成果</h3>
+              <ul>
+                <li>规范的项目数据台账</li>
+                <li>报告级专题图件</li>
+                <li>三维地层与污染模型</li>
+                <li>完整审查成果包</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="service-promise reveal">
+            <span>数据不用自己整理</span>
+            <span>图件直接用于报告</span>
+            <span>评审前后配合修改</span>
+            <div class="service-promise__actions">
+              <a class="button button--primary" href="./showcase.html">案例展示</a>
+              <a class="button button--secondary" href="#contact">沟通需求</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section products" id="product">
+        <div class="container">
+          <div class="section-heading reveal">
+            <h2>FigHub：项目经验沉淀的在线工具平台</h2>
+            <p>把高频、重复的成果生产做成在线工具：上传数据，输出可直接用于报告的图件。</p>
+          </div>
+
+          <div class="product-hero reveal">
+            <figure class="product-hero__shot">
+              <img src="./images/fighub-home.webp" alt="FigHub 在线工具平台界面" width="1500" height="950" loading="lazy" decoding="async">
+            </figure>
+            <div class="product-hero__body">
+              <ul class="product-hero__points">
+                <li>调查数据直接成图</li>
+                <li>源自 50+ 场调项目</li>
+                <li>重复制图在线完成</li>
+              </ul>
+              <div class="product-hero__actions">
+                <a class="button button--primary button--large" href="../fighub/index.html" target="_blank" rel="noopener noreferrer">打开 FigHub</a>
+                <a class="button button--secondary button--large" href="#contact">沟通需求</a>
+              </div>
+              <span class="product-hero__note">价格与使用说明以 FigHub 页面为准。</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section cases" id="cases">
+        <div class="container">
+          <div class="section-heading reveal">
+            <h2>真实项目，沉淀真实能力</h2>
+            <p>覆盖钢铁、化工、填埋场、矿区、流域等场景，成果含数据建库、图件、模型与汇报展示。</p>
+          </div>
+
+          <div class="case-grid">
+            <article class="case-card reveal">
+              <div class="case-card__cover case-card__cover--steel">
+                <span>建库与出图</span>
+              </div>
+              <div class="case-card__body">
+                <h3>重工业与化工地块</h3>
+                <p>杭州钢铁厂、济南钢铁总厂、沈化 POPs、重庆有机化工厂原址、郑州硫酸厂等。</p>
+                <ul>
+                  <li>样品建库与清洗</li>
+                  <li>污染分布预测与修复范围表达</li>
+                  <li>二维专题图批量生产</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="case-card reveal">
+              <div class="case-card__cover case-card__cover--landfill">
+                <span>三维建模</span>
+              </div>
+              <div class="case-card__body">
+                <h3>复杂场地三维表达</h3>
+                <p>昆山市淀山湖镇垃圾填埋场、颜春岭垃圾填埋场、重庆双碑组团三维模拟等。</p>
+                <ul>
+                  <li>三维地层与污染建模</li>
+                  <li>动态展示与汇报支持</li>
+                  <li>项目过程成果可视化</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="case-card reveal">
+              <div class="case-card__cover case-card__cover--platform">
+                <span>数据发布</span>
+              </div>
+              <div class="case-card__body">
+                <h3>区域级数据整合</h3>
+                <p>广西重点行业企业用地调查空间信息整合平台、在线地图发布等项目。</p>
+                <ul>
+                  <li>项目资料结构化整理</li>
+                  <li>边界标准化与格式转换</li>
+                  <li>平台发布与长期复用</li>
+                </ul>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+      <section class="section pricing" id="cooperation">
+        <div class="container">
+          <div class="section-heading reveal">
+            <h2>按项目需要，选择合作方式</h2>
+            <p>轻量需求用在线工具；批量成果与定制流程走定制服务或长期协作。</p>
+          </div>
+
+          <div class="pricing-grid">
+            <article class="pricing-card reveal">
+              <div class="pricing-card__head">
+                <h3>在线工具出图</h3>
+                <span class="pricing-card__label">自助使用</span>
+              </div>
+              <p>轻量、单点需求：在 FigHub 上传数据，按需购买。</p>
+              <ul>
+                <li>边界成果 / 钻孔布点 / 垂向分布等</li>
+                <li>按场地计价，7 天内改到满意</li>
+                <li>图件可直接用于报告</li>
+              </ul>
+              <a class="button button--primary" href="../fighub/index.html" target="_blank" rel="noopener noreferrer">打开 FigHub</a>
+            </article>
+
+            <article class="pricing-card reveal">
+              <div class="pricing-card__head">
+                <h3>污染调查成果</h3>
+                <span class="pricing-card__label">标准服务</span>
+              </div>
+              <p>批量图件、数据建库、三维表达与流程定制，按项目交付。</p>
+              <ul>
+                <li>专题图件批量制作与成果包整理</li>
+                <li>数据清洗、建库与多源资料标准化</li>
+                <li>三维地层/污染建模与汇报展示</li>
+              </ul>
+              <a class="button button--primary" href="./showcase.html">案例展示</a>
+            </article>
+
+            <article class="pricing-card reveal">
+              <div class="pricing-card__head">
+                <h3>专项支持服务</h3>
+                <span class="pricing-card__label">长期协作</span>
+              </div>
+              <p>长期承接同类项目、需要稳定交付节奏的团队。</p>
+              <ul>
+                <li>按项目周期协作与批量交付</li>
+                <li>定制工具 / 平台能力的持续迭代</li>
+                <li>阶段性技术支持与培训</li>
+              </ul>
+              <a class="button button--secondary" href="#contact">沟通需求</a>
+            </article>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="section contact" id="contact">
+        <div class="container">
+          <div class="contact__content reveal">
+            <h2>先判断路径，再投入实施</h2>
+            <p>
+              适合需要快速完成数据整理、专题图生产、污染范围表达与三维展示的项目团队。
+            </p>
+            <div class="contact-list">
+              <div class="contact-list__rows">
+                <a href="tel:15313195032"><span class="contact-list__sym" aria-hidden="true">☎</span><small>电话</small><strong>15313195032</strong></a>
+                <a href="mailto:356602499@qq.com"><span class="contact-list__sym" aria-hidden="true">✉</span><small>邮箱</small><strong>356602499@qq.com</strong></a>
+                <span class="contact-list__copy" role="button" tabindex="0" title="点击复制微信号" data-copy="paomo720"><span class="contact-list__sym" aria-hidden="true">🗨</span><small>微信</small><strong>paomo720</strong></span>
+              </div>
+              <div class="contact-list__qrcode">
+                <small>关注公众号</small>
+                <div class="qrcode-box">
+                  <img src="./images/qrcode.jpg" alt="屹云科技公众号二维码" loading="lazy" decoding="async">
+                </div>
+                <em>扫码查看工具发布与技术内容</em>
+              </div>
+            </div>
+            <p class="contact__note">对公合作：支持合同与开票，具体信息请联系获取。</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer__inner">
+        <div>
+          <strong>北京屹云科技有限公司</strong>
+          <p>调查成果可视化服务商</p>
+        </div>
+        <div>
+          <span id="year"></span>
+          <p class="footer__product"><span>在线工具</span> · <a class="footer__link" href="../fighub/index.html" target="_blank" rel="noopener noreferrer">FigHub 在线工具平台<span class="footer__link-arrow" aria-hidden="true">↗</span></a></p>
+          <a class="footer__beian" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">京ICP备2025155788号</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>

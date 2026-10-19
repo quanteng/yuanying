@@ -1,0 +1,1094 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>屹云科技 · 全站 UI 交互原型 | v0 Handoff</title>
+  <meta name="description" content="官网、FigHub、用户中心、运营后台与 boundary 工具的独立交互原型交付入口。">
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #111827;
+      --muted: #667085;
+      --line: #e4e7ec;
+      --line-strong: #d0d5dd;
+      --blue: #4f8cff;
+      --blue-dark: #2f6fe4;
+      --blue-soft: #eef4ff;
+      --green: #1f9d61;
+      --green-soft: #eaf8f0;
+      --amber: #b7791f;
+      --amber-soft: #fff7e8;
+      --dark: #0f1726;
+      --radius: 18px;
+      --shadow: 0 18px 50px rgba(16, 24, 40, .08);
+      --shadow-soft: 0 8px 24px rgba(16, 24, 40, .07);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 88% 2%, rgba(79, 140, 255, .13), transparent 26rem),
+        linear-gradient(180deg, #f9fbff 0, var(--bg) 36rem);
+      color: var(--ink);
+      font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    img { display: block; max-width: 100%; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(228, 231, 236, .78);
+      background: rgba(249, 251, 255, .9);
+      backdrop-filter: blur(18px);
+    }
+    .topbar__inner {
+      width: min(1240px, calc(100% - 40px));
+      min-height: 68px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-weight: 800;
+      letter-spacing: -.02em;
+      white-space: nowrap;
+    }
+    .brand__mark {
+      display: grid;
+      grid-template-columns: repeat(3, 4px);
+      align-items: end;
+      gap: 2px;
+      width: 30px;
+      height: 30px;
+      padding: 6px;
+      border-radius: 9px;
+      background: var(--dark);
+    }
+    .brand__mark i {
+      display: block;
+      border-radius: 2px;
+      background: #74a7ff;
+    }
+    .brand__mark i:nth-child(1) { height: 9px; }
+    .brand__mark i:nth-child(2) { height: 14px; background: #a8c7ff; }
+    .brand__mark i:nth-child(3) { height: 6px; background: #5fe0a6; }
+    .brand small {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: .04em;
+      line-height: 1.2;
+    }
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      color: #475467;
+      font-size: 13px;
+    }
+    .topnav a:hover { color: var(--blue-dark); }
+    .topbar__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 11px;
+      border: 1px solid #d8e4ff;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: #2f6fe4;
+      font: 700 10px/1 var(--mono);
+      letter-spacing: .05em;
+    }
+    .topbar__badge::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4f8cff;
+      box-shadow: 0 0 0 4px rgba(79, 140, 255, .12);
+    }
+
+    .wrap { width: min(1240px, calc(100% - 40px)); margin: 0 auto; }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.02fr) minmax(420px, .98fr);
+      gap: 54px;
+      align-items: center;
+      padding: 82px 0 66px;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--blue-dark);
+      font: 800 10px/1.4 var(--mono);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 18px;
+      height: 2px;
+      border-radius: 2px;
+      background: var(--blue);
+    }
+    h1 {
+      max-width: 700px;
+      margin: 18px 0 20px;
+      font-size: clamp(40px, 5vw, 66px);
+      line-height: 1.07;
+      letter-spacing: -.055em;
+    }
+    h1 em {
+      color: var(--blue-dark);
+      font-style: normal;
+    }
+    .hero__lede {
+      max-width: 680px;
+      margin: 0;
+      color: #475467;
+      font-size: 17px;
+      line-height: 1.9;
+    }
+    .hero__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 46px;
+      padding: 0 18px;
+      border: 1px solid var(--line-strong);
+      border-radius: 11px;
+      background: var(--paper);
+      color: var(--ink);
+      font: 700 13px/1 inherit;
+      box-shadow: 0 1px 2px rgba(16, 24, 40, .03);
+    }
+    .button:hover {
+      border-color: #9bb9f6;
+      transform: translateY(-1px);
+    }
+    .button--primary {
+      border-color: var(--blue-dark);
+      background: var(--blue-dark);
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(47, 111, 228, .22);
+    }
+    .button--primary:hover {
+      background: #255fce;
+      border-color: #255fce;
+    }
+    .hero__meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .hero__meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .hero__meta span::before {
+      content: "";
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #98a2b3;
+    }
+
+    .stage {
+      position: relative;
+      min-height: 490px;
+      padding: 28px;
+      border: 1px solid rgba(208, 213, 221, .8);
+      border-radius: 24px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.92), rgba(238,244,255,.78)),
+        repeating-linear-gradient(90deg, transparent 0 41px, rgba(79,140,255,.055) 41px 42px),
+        repeating-linear-gradient(0deg, transparent 0 41px, rgba(79,140,255,.055) 41px 42px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .stage::before {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      right: -100px;
+      top: -120px;
+      border-radius: 50%;
+      background: rgba(79, 140, 255, .14);
+      filter: blur(2px);
+    }
+    .stage__label {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      color: var(--muted);
+      font: 700 9px/1 var(--mono);
+      letter-spacing: .08em;
+    }
+    .stage__status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--green);
+    }
+    .stage__status::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+    .browser {
+      position: relative;
+      z-index: 1;
+      border: 1px solid #d5dbe5;
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 18px 36px rgba(15, 23, 42, .14);
+      overflow: hidden;
+      transform: rotate(-1.2deg);
+    }
+    .browser__bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      height: 34px;
+      padding: 0 12px;
+      border-bottom: 1px solid #e7eaf0;
+      background: #f8fafc;
+    }
+    .browser__bar i {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #c9d0da;
+    }
+    .browser__bar span {
+      flex: 1;
+      height: 18px;
+      margin-left: 6px;
+      border-radius: 5px;
+      background: #eef1f5;
+    }
+    .browser img {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      object-position: top center;
+    }
+    .stage__note {
+      position: absolute;
+      z-index: 3;
+      right: 18px;
+      bottom: 18px;
+      width: 218px;
+      padding: 13px 14px;
+      border: 1px solid #d8e4ff;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .94);
+      box-shadow: var(--shadow-soft);
+      font-size: 11px;
+      line-height: 1.55;
+      backdrop-filter: blur(10px);
+    }
+    .stage__note strong {
+      display: block;
+      margin-bottom: 2px;
+      color: #172554;
+      font-size: 12px;
+    }
+
+    .entry-section {
+      padding: 12px 0 64px;
+    }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 22px;
+    }
+    .section-head h2 {
+      margin: 8px 0 0;
+      font-size: clamp(27px, 3vw, 38px);
+      line-height: 1.2;
+      letter-spacing: -.035em;
+    }
+    .section-head p {
+      max-width: 520px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .entry-grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .entry-card {
+      grid-column: span 3;
+      display: flex;
+      flex-direction: column;
+      min-height: 344px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: 0 1px 2px rgba(16, 24, 40, .03);
+      overflow: hidden;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .entry-card:hover {
+      transform: translateY(-4px);
+      border-color: #c8d8f8;
+      box-shadow: var(--shadow);
+    }
+    .entry-card__preview {
+      height: 174px;
+      background: #eef2f7;
+      overflow: hidden;
+    }
+    .entry-card__preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      transition: transform .35s ease;
+    }
+    .entry-card:hover .entry-card__preview img { transform: scale(1.025); }
+    .entry-card__body {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      padding: 17px 17px 16px;
+    }
+    .entry-card__kicker {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font: 700 9px/1.2 var(--mono);
+      letter-spacing: .06em;
+    }
+    .entry-card__kicker span:first-child { color: var(--blue-dark); }
+    .entry-card h3 {
+      margin: 0 0 7px;
+      font-size: 18px;
+      letter-spacing: -.02em;
+    }
+    .entry-card p {
+      margin: 0;
+      color: #667085;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+    .entry-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 12px;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 22px;
+      padding: 0 7px;
+      border-radius: 999px;
+      background: #f2f4f7;
+      color: #475467;
+      font-size: 9px;
+      font-weight: 700;
+    }
+    .tag--blue { background: var(--blue-soft); color: var(--blue-dark); }
+    .tag--green { background: var(--green-soft); color: var(--green); }
+    .tag--amber { background: var(--amber-soft); color: var(--amber); }
+    .entry-card__open {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+      padding-top: 14px;
+      color: var(--blue-dark);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      margin: 6px 0 70px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--line);
+      overflow: hidden;
+    }
+    .metric {
+      padding: 20px 22px;
+      background: rgba(255,255,255,.88);
+    }
+    .metric strong {
+      display: block;
+      font-size: 28px;
+      letter-spacing: -.04em;
+      line-height: 1.1;
+    }
+    .metric span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .map-section, .baseline-section, .handoff-section {
+      padding: 66px 0;
+      border-top: 1px solid var(--line);
+    }
+    .map-layout {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 20px;
+      align-items: start;
+    }
+    .map-board {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .map-board__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .map-board__head strong { font-size: 13px; }
+    .map-board__head span {
+      color: var(--muted);
+      font: 600 10px/1 var(--mono);
+    }
+    .map-groups {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .map-group {
+      padding: 18px 20px 20px;
+    }
+    .map-group + .map-group { border-left: 1px solid var(--line); }
+    .map-group:nth-child(n+3) {
+      border-top: 1px solid var(--line);
+      border-left: 0;
+    }
+    .map-group:nth-child(even) { border-left: 1px solid var(--line); }
+    .map-group--wide {
+      grid-column: 1 / -1;
+      border-top: 1px solid var(--line);
+      border-left: 0 !important;
+    }
+    .map-group--wide .map-links {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .map-group h3 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 0 10px;
+      font-size: 12px;
+    }
+    .map-group h3 span {
+      color: #98a2b3;
+      font: 700 9px/1 var(--mono);
+    }
+    .map-links {
+      display: grid;
+      gap: 2px;
+    }
+    .map-links a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 31px;
+      padding: 0 7px;
+      border-radius: 7px;
+      color: #475467;
+      font-size: 11px;
+    }
+    .map-links a::after {
+      content: "↗";
+      color: #b1b9c5;
+      font-size: 10px;
+    }
+    .map-links a:hover {
+      background: var(--blue-soft);
+      color: var(--blue-dark);
+    }
+    .map-links a:hover::after { color: var(--blue-dark); }
+
+    .interaction-panel {
+      display: grid;
+      gap: 10px;
+    }
+    .interaction-card {
+      padding: 17px 18px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: rgba(255,255,255,.9);
+    }
+    .interaction-card__num {
+      display: inline-grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      margin-bottom: 10px;
+      border-radius: 7px;
+      background: var(--blue-soft);
+      color: var(--blue-dark);
+      font: 800 10px/1 var(--mono);
+    }
+    .interaction-card h3 {
+      margin: 0 0 5px;
+      font-size: 13px;
+    }
+    .interaction-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .baseline-grid {
+      display: grid;
+      grid-template-columns: 1.12fr .88fr;
+      gap: 20px;
+    }
+    .token-board, .contract-board {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .board-head {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .board-head strong { font-size: 13px; }
+    .board-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .swatches {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--line);
+    }
+    .swatch {
+      min-height: 106px;
+      padding: 14px;
+      background: #fff;
+    }
+    .swatch__color {
+      width: 100%;
+      height: 32px;
+      margin-bottom: 10px;
+      border: 1px solid rgba(15, 23, 42, .08);
+      border-radius: 7px;
+    }
+    .swatch strong {
+      display: block;
+      font-size: 11px;
+    }
+    .swatch code {
+      color: var(--muted);
+      font: 500 9px/1.5 var(--mono);
+    }
+    .token-notes {
+      display: grid;
+      gap: 0;
+    }
+    .token-note {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 16px;
+      padding: 13px 20px;
+      border-top: 1px solid var(--line);
+      font-size: 11px;
+    }
+    .token-note span { color: var(--muted); }
+    .contract-list {
+      display: grid;
+    }
+    .contract-row {
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      gap: 12px;
+      padding: 15px 20px;
+      border-top: 1px solid var(--line);
+    }
+    .contract-row:first-child { border-top: 0; }
+    .contract-row__icon {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: #f2f4f7;
+      color: #344054;
+      font: 800 11px/1 var(--mono);
+    }
+    .contract-row strong {
+      display: block;
+      font-size: 11px;
+    }
+    .contract-row p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.65;
+    }
+
+    .handoff-grid {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 28px;
+      align-items: start;
+    }
+    .handoff-copy h2 {
+      margin: 8px 0 14px;
+      font-size: clamp(28px, 3.3vw, 42px);
+      line-height: 1.18;
+      letter-spacing: -.04em;
+    }
+    .handoff-copy > p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.85;
+    }
+    .handoff-callout {
+      margin-top: 22px;
+      padding: 17px 18px;
+      border: 1px solid #d8e4ff;
+      border-radius: 14px;
+      background: var(--blue-soft);
+      color: #244a8e;
+      font-size: 12px;
+      line-height: 1.75;
+    }
+    .handoff-steps {
+      display: grid;
+      gap: 10px;
+    }
+    .handoff-step {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 12px;
+      padding: 16px 17px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+    }
+    .handoff-step > span {
+      display: grid;
+      place-items: center;
+      width: 27px;
+      height: 27px;
+      border-radius: 50%;
+      background: var(--dark);
+      color: #fff;
+      font: 800 10px/1 var(--mono);
+    }
+    .handoff-step h3 {
+      margin: 0 0 3px;
+      font-size: 12px;
+    }
+    .handoff-step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 10.5px;
+      line-height: 1.7;
+    }
+
+    .footer {
+      margin-top: 20px;
+      border-top: 1px solid var(--line);
+      background: #fff;
+    }
+    .footer__inner {
+      width: min(1240px, calc(100% - 40px));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      min-height: 78px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+    .footer__inner code {
+      font-family: var(--mono);
+      color: #475467;
+    }
+
+    @media (max-width: 1050px) {
+      .hero { grid-template-columns: 1fr; gap: 34px; padding-top: 58px; }
+      .stage { min-height: auto; }
+      .entry-card { grid-column: span 6; }
+      .map-layout, .baseline-grid, .handoff-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 760px) {
+      .topnav { display: none; }
+      .topbar__badge { display: none; }
+      .wrap, .topbar__inner, .footer__inner { width: min(100% - 28px, 1240px); }
+      .hero { padding: 42px 0 42px; }
+      h1 { font-size: 40px; }
+      .hero__lede { font-size: 15px; }
+      .entry-card { grid-column: span 12; }
+      .metrics { grid-template-columns: 1fr 1fr; margin-bottom: 44px; }
+      .map-groups { grid-template-columns: 1fr; }
+      .map-group--wide .map-links { grid-template-columns: 1fr; }
+      .map-group + .map-group, .map-group:nth-child(n+3), .map-group:nth-child(even) {
+        border-top: 1px solid var(--line);
+        border-left: 0;
+      }
+      .swatches { grid-template-columns: 1fr 1fr; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 10px; }
+      .stage__note { position: relative; right: auto; bottom: auto; width: auto; margin: 14px 0 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="brand" href="#top">
+        <span class="brand__mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>屹云科技 UI 原型<small>Official · FigHub · Admin · Boundary</small></span>
+      </a>
+      <nav class="topnav" aria-label="页面导航">
+        <a href="#entries">原型入口</a>
+        <a href="#pagemap">页面地图</a>
+        <a href="#baseline">设计基线</a>
+        <a href="#handoff">交接说明</a>
+      </nav>
+      <span class="topbar__badge">V0 HANDOFF · 2026.10</span>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="wrap hero">
+      <div>
+        <span class="eyebrow">Interactive UI Handoff</span>
+        <h1>把四个界面，<br>交给 v0 做成<em>一套体验</em></h1>
+        <p class="hero__lede">
+          这里不是截图拼贴。官网、FigHub 用户端、运营后台与 boundary 工作台都保留了真实页面结构、路由和关键交互，并用独立演示数据运行。v0 可以直接在这份原型上重做视觉，再把新的前端交回来。
+        </p>
+        <div class="hero__actions">
+          <a class="button button--primary" href="fighub/index.html#home">打开 FigHub 交互原型 <span>↗</span></a>
+          <a class="button" href="#pagemap">查看完整页面地图</a>
+        </div>
+        <div class="hero__meta">
+          <span>离线可运行</span>
+          <span>真实路由与弹窗</span>
+          <span>桌面 + 移动端</span>
+          <span>演示数据已脱敏</span>
+        </div>
+      </div>
+
+      <div class="stage" aria-label="原型预览">
+        <div class="stage__label">
+          <span>PRIMARY PREVIEW · FIGHUB</span>
+          <span class="stage__status">LIVE INTERACTION</span>
+        </div>
+        <div class="browser">
+          <div class="browser__bar" aria-hidden="true"><i></i><i></i><i></i><span></span></div>
+          <img src="previews/fighub-home.png" alt="FigHub 首页预览">
+        </div>
+        <div class="stage__note">
+          <strong>从入口导航开始</strong>
+          每个原型页左下角有「原型导航」，可切换访客、登录态、后台，以及 18 个关键弹窗场景。
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap entry-section" id="entries">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Four Surfaces</span>
+          <h2>四个独立入口，一套视觉语言</h2>
+        </div>
+        <p>先把结构、状态和交互跑通，再统一字体、密度、圆角、色彩与动效。入口之间可以互相跳转。</p>
+      </div>
+
+      <div class="entry-grid">
+        <a class="entry-card" href="official/index.html">
+          <div class="entry-card__preview"><img src="previews/official-home.png" alt="屹云科技官网预览"></div>
+          <div class="entry-card__body">
+            <div class="entry-card__kicker"><span>01 · OFFICIAL</span><span>2 PAGES</span></div>
+            <h3>屹云科技官网</h3>
+            <p>品牌首页、案例展示与页内导航。保留首屏图件抽屉、服务流程、案例与联系入口。</p>
+            <div class="entry-card__tags"><span class="tag tag--amber">品牌站</span><span class="tag">响应式</span><span class="tag">内容展示</span></div>
+            <span class="entry-card__open">打开官网原型 <span>→</span></span>
+          </div>
+        </a>
+
+        <a class="entry-card" href="fighub/index.html?mode=authed#home">
+          <div class="entry-card__preview"><img src="previews/fighub-detail.png" alt="FigHub 工具详情预览"></div>
+          <div class="entry-card__body">
+            <div class="entry-card__kicker"><span>02 · FIGHUB</span><span>15 ROUTES</span></div>
+            <h3>FigHub 用户端</h3>
+            <p>首页、工具库、工具详情、数据集、需求墙、价格、帮助、关于、登录注册、用户中心。</p>
+            <div class="entry-card__tags"><span class="tag tag--blue">完整路由</span><span class="tag">购买流程</span><span class="tag">移动端</span></div>
+            <span class="entry-card__open">打开 FigHub 原型 <span>→</span></span>
+          </div>
+        </a>
+
+        <a class="entry-card" href="fighub/index.html?mode=admin#admin/tools">
+          <div class="entry-card__preview"><img src="previews/fighub-admin.png" alt="FigHub 运营后台预览"></div>
+          <div class="entry-card__body">
+            <div class="entry-card__kicker"><span>03 · ADMIN</span><span>21 VIEWS</span></div>
+            <h3>运营后台</h3>
+            <p>工具、标签、文案、素材、数据集、价格、用户、订单、发票、退费、门禁与统计全部可进入。</p>
+            <div class="entry-card__tags"><span class="tag tag--green">内容管理</span><span class="tag">财务视图</span><span class="tag">表格弹窗</span></div>
+            <span class="entry-card__open">打开后台原型 <span>→</span></span>
+          </div>
+        </a>
+
+        <a class="entry-card" href="boundary/index.html">
+          <div class="entry-card__preview"><img src="previews/boundary-workbench.png" alt="boundary 边界工作台预览"></div>
+          <div class="entry-card__body">
+            <div class="entry-card__kicker"><span>04 · BOUNDARY</span><span>1 WORKBENCH</span></div>
+            <h3>边界成果工作台</h3>
+            <p>三栏工作台、上传与样例、地图图斑、参数自动回填、处理日志、成果下载与权益引导。</p>
+            <div class="entry-card__tags"><span class="tag tag--blue">地图交互</span><span class="tag">即时回填</span><span class="tag">下载链路</span></div>
+            <span class="entry-card__open">打开 boundary 原型 <span>→</span></span>
+          </div>
+        </a>
+      </div>
+
+      <div class="metrics" aria-label="交付规模">
+        <div class="metric"><strong>4</strong><span>独立运行的前端表面</span></div>
+        <div class="metric"><strong>40+</strong><span>可进入的页面 / 视图状态</span></div>
+        <div class="metric"><strong>18</strong><span>常用弹窗与抽屉场景</span></div>
+        <div class="metric"><strong>2</strong><span>桌面与移动端断点</span></div>
+      </div>
+    </section>
+
+    <section class="wrap map-section" id="pagemap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Page Map</span>
+          <h2>完整页面地图</h2>
+        </div>
+        <p>链接直接落到对应页面或后台视图。后台链接会以管理员演示身份打开，不需要口令。</p>
+      </div>
+
+      <div class="map-layout">
+        <div class="map-board">
+          <div class="map-board__head"><strong>页面与视图索引</strong><span>CLICK TO OPEN</span></div>
+          <div class="map-groups">
+            <div class="map-group">
+              <h3>官网 <span>02</span></h3>
+              <div class="map-links">
+                <a href="official/index.html">官网首页</a>
+                <a href="official/showcase.html">案例展示</a>
+              </div>
+            </div>
+            <div class="map-group">
+              <h3>FigHub 公共页 <span>10</span></h3>
+              <div class="map-links">
+                <a href="fighub/index.html?mode=authed#home">首页</a>
+                <a href="fighub/index.html?mode=authed#tools">工具库</a>
+                <a href="fighub/index.html?mode=authed#tool/boundary">工具详情</a>
+                <a href="fighub/index.html?mode=authed#datasets">数据集</a>
+                <a href="fighub/index.html?mode=authed#dataset/survey-points">数据集详情</a>
+                <a href="fighub/index.html?mode=authed#requests">需求墙</a>
+                <a href="fighub/index.html?mode=authed#pricing">价格</a>
+                <a href="fighub/index.html?mode=authed#help">帮助中心</a>
+                <a href="fighub/index.html?mode=authed#about">关于我们</a>
+                <a href="fighub/index.html?mode=authed#terms">服务条款 / 隐私政策</a>
+              </div>
+            </div>
+            <div class="map-group map-group--wide">
+              <h3>认证与用户中心 <span>09</span></h3>
+              <div class="map-links">
+                <a href="fighub/index.html?mode=guest#login">登录</a>
+                <a href="fighub/index.html?mode=guest#register">注册</a>
+                <a href="fighub/index.html?mode=guest#forgot">找回密码</a>
+                <a href="fighub/index.html?mode=authed#verify">验证邮箱</a>
+                <a href="fighub/index.html?mode=authed#account/entitlements">我的权益</a>
+                <a href="fighub/index.html?mode=authed#account/profile">个人资料</a>
+                <a href="fighub/index.html?mode=authed#account/security">账号安全</a>
+                <a href="fighub/index.html?mode=authed#account/orders">交易记录</a>
+                <a href="fighub/index.html?mode=authed#account/invoices">发票管理</a>
+              </div>
+            </div>
+            <div class="map-group map-group--wide">
+              <h3>运营后台 <span>21</span></h3>
+              <div class="map-links">
+                <a href="fighub/index.html?mode=admin#admin/tools">工具管理</a>
+                <a href="fighub/index.html?mode=admin#admin/tags">标签管理</a>
+                <a href="fighub/index.html?mode=admin#admin/labels">枚举文案</a>
+                <a href="fighub/index.html?mode=admin#admin/tool_media">工具说明素材</a>
+                <a href="fighub/index.html?mode=admin#admin/tool_updates">工具更新说明</a>
+                <a href="fighub/index.html?mode=admin#admin/tool_docs">数据要求</a>
+                <a href="fighub/index.html?mode=admin#admin/datasets">数据集</a>
+                <a href="fighub/index.html?mode=admin#admin/help">帮助中心</a>
+                <a href="fighub/index.html?mode=admin#admin/requests">需求墙</a>
+                <a href="fighub/index.html?mode=admin#admin/site">站点设置</a>
+                <a href="fighub/index.html?mode=admin#admin/products">计费产品</a>
+                <a href="fighub/index.html?mode=admin#admin/billing_plans">计费方案</a>
+                <a href="fighub/index.html?mode=admin#admin/coupons">使用券</a>
+                <a href="fighub/index.html?mode=admin#admin/users">用户</a>
+                <a href="fighub/index.html?mode=admin#admin/sites">场地台账</a>
+                <a href="fighub/index.html?mode=admin#admin/feedback">用户反馈</a>
+                <a href="fighub/index.html?mode=admin#admin/orders">订单</a>
+                <a href="fighub/index.html?mode=admin#admin/invoices">发票</a>
+                <a href="fighub/index.html?mode=admin#admin/refunds">退费管理</a>
+                <a href="fighub/index.html?mode=admin#admin/policies">使用门禁</a>
+                <a href="fighub/index.html?mode=admin#admin/stats">运营统计</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="interaction-panel">
+          <article class="interaction-card">
+            <span class="interaction-card__num">01</span>
+            <h3>保留路由，不改成截图页</h3>
+            <p>FigHub 是 hash SPA。工具详情、用户中心、后台视图都由同一套页面骨架渲染，改版后仍需能从顶部导航和账户菜单自然到达。</p>
+          </article>
+          <article class="interaction-card">
+            <span class="interaction-card__num">02</span>
+            <h3>保留状态切换</h3>
+            <p>访客、已登录、管理员会改变顶栏、购买入口、账号菜单和后台权限。原型左下角可以随时切换。</p>
+          </article>
+          <article class="interaction-card">
+            <span class="interaction-card__num">03</span>
+            <h3>保留即时反馈</h3>
+            <p>工具筛选、价格选择、账号页签、需求投票、后台表格和 boundary 参数回填都应即时响应，不新增“生成”步骤。</p>
+          </article>
+          <article class="interaction-card">
+            <span class="interaction-card__num">04</span>
+            <h3>保留弹窗上下文</h3>
+            <p>购买、支付、VIP、分享、扫码、需求提交、安全设置、退费、注销和后台编辑都必须从原页面打开并保留背后的上下文。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap baseline-section" id="baseline">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Visual Baseline</span>
+          <h2>先统一这几条，再做视觉升级</h2>
+        </div>
+        <p>颜色、字号和圆角已经是现有规范的一部分。v0 可以重塑层级，但建议保留蓝色作为交互语义、红绿只做状态。</p>
+      </div>
+
+      <div class="baseline-grid">
+        <div class="token-board">
+          <div class="board-head">
+            <strong>共享设计令牌</strong>
+            <p>与 `docs/05-规约/前端风格规范.md` 和品牌色彩系统对齐。</p>
+          </div>
+          <div class="swatches">
+            <div class="swatch"><div class="swatch__color" style="background:#5296ff"></div><strong>主色 / 交互</strong><code>#5296FF</code></div>
+            <div class="swatch"><div class="swatch__color" style="background:#3f7ceb"></div><strong>主色深</strong><code>#3F7CEB</code></div>
+            <div class="swatch"><div class="swatch__color" style="background:#eef4ff"></div><strong>浅蓝底</strong><code>#EEF4FF</code></div>
+            <div class="swatch"><div class="swatch__color" style="background:#f6f8fb"></div><strong>页面底色</strong><code>#F6F8FB</code></div>
+            <div class="swatch"><div class="swatch__color" style="background:#17293a"></div><strong>正文墨色</strong><code>#17293A</code></div>
+            <div class="swatch"><div class="swatch__color" style="background:#e4e9f0"></div><strong>分割线</strong><code>#E4E9F0</code></div>
+          </div>
+          <div class="token-notes">
+            <div class="token-note"><span>字体阶梯</span><strong>页面 20–24 / 区块 14 / 正文 13 / 标签 11–12</strong></div>
+            <div class="token-note"><span>圆角</span><strong>控件 8–10 · 卡片 12–14 · 浮层 14–16 · 胶囊 999</strong></div>
+            <div class="token-note"><span>间距</span><strong>4 / 8 / 10 / 12 / 14 / 16 / 20 / 24</strong></div>
+            <div class="token-note"><span>工作台</span><strong>固定页眉 56px；主体内部滚动；不出现整页滚动条</strong></div>
+          </div>
+        </div>
+
+        <div class="contract-board">
+          <div class="board-head">
+            <strong>改版时不要丢掉的体验合同</strong>
+            <p>这些是页面之间“像同一产品”的关键。</p>
+          </div>
+          <div class="contract-list">
+            <div class="contract-row"><span class="contract-row__icon">01</span><div><strong>同一页眉语言</strong><p>官网用品牌页眉，FigHub 用产品页眉，工具页用共享页眉；三者可以不同背景，但登录入口、品牌落点与返回路径要一致。</p></div></div>
+            <div class="contract-row"><span class="contract-row__icon">02</span><div><strong>按钮层级一致</strong><p>主操作只保留一个高权重按钮；“购买 / 开始使用 / 提交参数”在页面上应使用同一套主按钮视觉。</p></div></div>
+            <div class="contract-row"><span class="contract-row__icon">03</span><div><strong>状态色有语义</strong><p>达标、成功、处理中、超限、失败只在状态出现；不要把红绿用于装饰或分类标签。</p></div></div>
+            <div class="contract-row"><span class="contract-row__icon">04</span><div><strong>空态给下一步</strong><p>工具筛选、数据集、订单、发票、后台表格都必须有明确空态动作，而不是空白区域。</p></div></div>
+            <div class="contract-row"><span class="contract-row__icon">05</span><div><strong>移动端不是缩放桌面</strong><p>FigHub 已使用底部标签栏、抽屉导航和贴底弹窗；重新设计时请一并检查 390px 宽度。</p></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap handoff-section" id="handoff">
+      <div class="handoff-grid">
+        <div class="handoff-copy">
+          <span class="eyebrow">How To Use</span>
+          <h2>v0 拿到后，先跑一遍再改</h2>
+          <p>
+            所有入口都可以双击打开。页面左下角的「原型导航」不是产品功能，而是这次交接用的状态切换器：可以直接进入登录页、后台、购买确认、支付方式、VIP、账号安全、退费、注销以及后台编辑弹窗。
+          </p>
+          <div class="handoff-callout">
+            改版建议从 FigHub 的「首页 → 工具详情 → 价格 → 购买/支付 → 用户中心」这条主链路开始。它同时决定官网的“打开 FigHub”承接页和 boundary 的入口体验。
+          </div>
+        </div>
+
+        <div class="handoff-steps">
+          <article class="handoff-step"><span>1</span><div><h3>先看主链路</h3><p>从 FigHub 首页进入边界工具详情，打开 VIP / 支付方式 / 购买确认，再进入账户中心确认信息是否承接得住。</p></div></article>
+          <article class="handoff-step"><span>2</span><div><h3>再跑工具工作台</h3><p>在 boundary 点「载入样例」，观察地图、参数自动回填、日志节奏和下载完成态；这是所有工具页的视觉基准。</p></div></article>
+          <article class="handoff-step"><span>3</span><div><h3>最后检查后台与移动端</h3><p>后台 21 个视图都可以独立进入；移动端用 390px 宽度检查导航抽屉、贴底弹窗与表格横向滚动。</p></div></article>
+          <article class="handoff-step"><span>4</span><div><h3>交回可运行前端</h3><p>保留现有路由和交互状态，替换布局与视觉。交付时请同时给出桌面、移动端关键页面和新弹窗状态。</p></div></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <span>北京屹云科技有限公司 · UI Handoff Prototype · 2026-10-19</span>
+      <span><code>原型/屹云全站原型/index.html</code></span>
+    </div>
+  </footer>
+</body>
+</html>

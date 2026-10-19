@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+    <html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>地块参数录入系统</title>
+        <!-- 离线原型：共享库与页眉均从原型包内加载。 -->
+        <script>
+          (function () {
+            window.YYKJ_WEBLIBS_BASE = "..";
+            window.YYKJ_WEBLIBS = ["leaflet", "bootstrap", "bootstrap-icons", "flatpickr", "html2canvas"];
+            document.write('<script src="../shared/yykj-weblibs/weblibs.js"><\/script>');
+            document.write('<script src="../shared/yykj-weblibs/site-registry.js"><\/script>');
+          })();
+        </script>
+        <script>
+          (function () {
+            window.YYKJ_BASEMAP_BASE = "..";
+            document.write('<script src="../shared/yykj-basemap/basemaps.js"><\/script>');
+          })();
+        </script>
+        <script>
+          (function () {
+            window.YYKJ_COMMON_HEADER = {
+              brand: "屹云科技",
+              logoText: "屹",
+              homeUrl: "../fighub/index.html",
+              homeTarget: "_self",
+              qrcodeUrl: "../fighub/images/qrcode/service-qr.jpg",
+              toolName: "边界成果整理",
+              layout: "default"
+            };
+            var css = document.createElement("link");
+            css.rel = "stylesheet";
+            css.href = "../shared/yykj-header/yykj-header.css";
+            document.head.appendChild(css);
+            var js = document.createElement("script");
+            js.src = "../shared/yykj-header/yykj-header.js";
+            js.defer = true;
+            document.head.appendChild(js);
+          })();
+        </script>
+        <link rel="stylesheet" href="./prototype-shell.css">
+        <style>
+            :root {
+                --bg-dark: #0f1726;
+                --bg-card: #182236;
+                --primary: #6fa6ff;
+                --text-light: #e8eff9;
+                --text-muted: #9dafc6;
+                --border-color: #28344c;
+                --map-height: 320px;
+                --top-panel-height: 200px;
+                --submit-btn-width: calc(100% - 30px);
+            }
+            body {
+                background-color: var(--bg-dark);
+                color: var(--text-light);
+                font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            }
+            .param-card {
+                background: var(--bg-card);
+                border-radius: 10px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+            /* 一屏三栏骨架：页眉 56px 由 /shared/yykj-header 提供，其余高度全给三栏 */
+            .app-container {
+                /* 页眉由 /shared/yykj-header 注入（56px）；这里再兜一层，页眉脚本异常时也不会塌 */
+                height: calc(100vh - var(--yykj-header-height, 56px));
+                padding: 10px 12px;
+                overflow: hidden;
+            }
+            /* 三栏：左栏宽度按"让地图区域成正方形"反算，中栏宽度保持不变，余量给右栏（日志）。
+               实测（1920×1080）：地图可视高度 = 视口高 - 352px（上方 288px + 下方 64px 是固定卡片/工具条），
+               地图列外宽 = 地图宽 + 38px（卡片内边距 30 + 栅格 8），
+               所以左栏外宽 = 100vh - 314px 时地图正好是正方形（任意视口高度都成立）。 */
+            @media (min-width: 992px) {
+                .app-container > .row > .col-shell.left-shell {
+                    /* 允许被压缩：窗口"高"的时候，左侧按视口高度算出来的宽度会把日志栏挤没，
+                       所以空间不足时优先压左栏（日志栏有 300px 保底） */
+                    flex: 0 1 auto;
+                    /* 在"正方形"基准上再宽一点点（+40px），多出来的宽度从日志栏扣 */
+                    width: calc(100vh - 274px);
+                    min-width: 240px;
+                    max-width: 52%;
+                }
+                /* 中栏与之前一致：占整行 36.36% */
+                .app-container > .row > .col-shell.mid-shell {
+                    flex: 0 0 36.36%;
+                    width: 36.36%;
+                    max-width: 36.36%;
+                }
+                /* 日志：吃掉剩余宽度（比原先更窄） */
+                .app-container > .row > .col-shell.right-shell {
+                    /* flex-basis 必须用 0（不能用 auto）：用 auto 时日志栏的基础宽度会跟着
+                       "日志内容"走 —— 载入地块信息后日志变长，日志栏会被撑宽、把左栏挤窄 */
+                    flex: 1 1 0;
+                    width: auto;
+                    min-width: 300px;
+                    max-width: none;
+                }
+            }
+            .col-shell {
+                height: 100%;
+                min-height: 0;
+                overflow: hidden;
+            }
+            .upload-card {
+                flex: 0 0 auto;
+                margin-bottom: 0;
+            }
+            /* 上传框 + 右侧样例数据按钮 */
+            .upload-row {
+                display: flex;
+                align-items: stretch;
+                gap: 6px;
+                margin-bottom: 8px;
+            }
+            .upload-row .file-upload-compact {
+                flex: 1 1 auto;
+                min-width: 0;
+                margin-bottom: 0;
+            }
+            .upload-row .sample-group {
+                flex: 0 0 auto;
+                align-self: center;
+            }
+            .upload-row .sample-group .btn {
+                font-size: 0.72rem;
+                padding: 0.2rem 0.45rem;
+                border-color: var(--border-color);
+                color: var(--text-muted);
+                white-space: nowrap;
+            }
+            .upload-row .sample-group .btn:hover {
+                background-color: rgba(111, 166, 255, 0.18);
+                border-color: var(--primary);
+                color: var(--text-light);
+            }
+
+            .upload-panel-content {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                min-height: 0;
+                gap: 8px;
+                justify-content: flex-start;
+            }
+
+            .upload-panel-content .file-upload-compact {
+                margin-bottom: 0;
+            }
+
+            .console-card {
+                display: flex;
+                flex-direction: column;
+                /* 与中栏"地块参数录入"底边对齐：去掉卡片默认的 margin-bottom，并撑满整栏 */
+                flex: 1 1 auto;
+                min-height: 0;
+                margin-bottom: 0;
+                overflow: hidden;
+            }
+
+            .console-area {
+                flex: 1;
+                min-height: 0;
+                overflow-y: auto;
+                overflow-x: hidden;
+                background: rgba(0,0,0,0.1);
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                padding: 8px 10px;
+                font-size: 0.75rem;
+            }
+            .console-flow {
+                display: block;
+                /* 日志固定单列：长条目换行显示，不再自动分栏 */
+                column-count: 1;
+            }
+
+            .input-card {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                min-height: 0;
+                margin-bottom: 0;
+                padding-bottom: 12px;
+            }
+            .form-control, .form-select {
+                background-color: rgba(0,0,0,0.2);
+                border: 1px solid var(--border-color);
+                color: var(--text-light) !important;  /* 确保文字始终为白色 */
+                caret-color: var(--text-light);  /* 光标颜色保持白色 */
+                transition: all 0.3s;
+                padding: 0.25rem 0.5rem;
+                font-size: 0.85rem;
+                height: calc(1.5em + 0.5rem + 2px);
+            }
+            /* 修改下拉框选中项的背景色 */
+            .form-select option:checked {
+                background-color: #28344c;  /* 暗色背景 */
+                color: var(--text-light);  /* 文字颜色保持白色 */
+            }
+
+
+
+            /* 修改输入框placeholder文字颜色（可选） */
+            .form-control::placeholder {
+                color: var(--text-muted);  /* 占位符文字用较暗颜色 */
+                opacity: 1;
+            }
+            .form-control:focus, .form-select:focus {
+                background-color: rgba(0,0,0,0.3);
+                border-color: var(--primary);
+                box-shadow: 0 0 0 0.25rem rgba(111, 166, 255, 0.2);
+            }
+            .form-label {
+                font-size: 0.82rem;
+                font-weight: 500;
+                color: var(--text-light);
+                margin-bottom: 0.3rem;
+            }
+            #previewMap {
+                height: 100%;
+                min-height: 150px;
+                border-radius: 8px;
+                border: 1px solid var(--border-color);
+            }
+            .file-upload-compact {
+                border: 2px dashed var(--border-color);
+                border-radius: 6px;
+                padding: 10px;
+                cursor: pointer;
+                transition: all 0.3s;
+                background: rgba(111, 166, 255, 0.05);
+                margin-bottom: 10px;
+                width: 100%;
+            }
+            .file-upload-compact:hover {
+                border-color: var(--primary);
+                background: rgba(111, 166, 255, 0.1);
+            }
+            .compact-icon {
+                font-size: 1.1rem;
+                margin-right: 6px;
+            }
+            .process-btn {
+                background: var(--primary);
+                border: none;
+                padding: 0.5rem 1rem;
+                font-weight: 500;
+                letter-spacing: 0.5px;
+                transition: all 0.3s;
+                width: 100%;
+                margin-top: 8px;
+                flex: 0 0 auto;
+            }
+            .process-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(111, 166, 255, 0.3);
+            }
+            .param-group {
+                margin-bottom: 0.6rem;
+            }
+            /* 参数区：单列，标签与控件同一行（一屏放下）；标签右对齐固定宽 */
+            .params-body {
+                flex: 1 1 auto;
+                min-height: 0;
+                display: flex;
+                flex-direction: column;
+                /* 行高紧凑，多出来的高度平分到行间（底部不留空档）；不出滚动条 */
+                justify-content: space-between;
+                gap: 6px;
+                overflow: hidden;
+                padding-right: 2px;
+            }
+            .field-row {
+                /* 行高随面板高度伸缩：空间富余时撑到上限，空间不足时优先压缩单行字段 */
+                flex: 1 1 auto;
+                min-height: 28px;
+                max-height: 40px;
+                display: grid;
+                /* 标签列按"5 字"宽度；4 字标签用两端对齐，左右同时对齐 */
+                grid-template-columns: 64px minmax(0, 1fr);
+                align-items: stretch;
+                column-gap: 8px;
+                margin-bottom: 0;
+            }
+            /* 单行控件：统一自然高度（≈30px，与行政区名称一致），不再被行高拉伸 */
+            .field-row .form-control:not(textarea),
+            .field-row .form-select,
+            .field-row .input-group-text,
+            .field-row .input-group > .btn {
+                height: calc(1.5em + 0.5rem + 2px);
+                min-height: 0;
+            }
+            .field-row .input-group > .btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .field-row > .form-label {
+                margin-bottom: 0;
+                font-size: 0.78rem;
+                font-weight: 500;
+                color: var(--text-muted);
+                line-height: 1.2;
+                align-self: center;
+                width: 100%;
+                /* 4 字标签（地块名称…）与 5 字标签（行政区代码…）左右两端都对齐 */
+                text-align: justify;
+                text-align-last: justify;
+            }
+            .field-control {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 6px;
+                min-width: 0;
+            }
+            .field-control > .form-control,
+            .field-control > .form-select,
+            .field-control > .date-input-wrap,
+            .field-control > .input-group {
+                flex: 1 1 auto;
+                min-width: 0;
+            }
+            .field-control .invalid-feedback {
+                flex: 1 1 100%;
+                margin-top: 0;
+                font-size: 0.72rem;
+            }
+            /* 多行字段（地块名称 / 生产单位 / 备注）：内容可能很长 → 多行框，可换行、可手动拉高 */
+            .field-row.textarea-row {
+                min-height: 52px;
+                max-height: 108px;
+                align-items: start;
+            }
+            .field-row.textarea-row > .form-label {
+                align-self: start;
+                padding-top: 8px;
+            }
+            .field-row textarea.form-control {
+                /* 多行框（地块名称/生产单位/备注）：按 rows 自然高度，不被行高拉伸 */
+                height: auto;
+                min-height: 46px;
+                line-height: 1.45;
+                resize: vertical;
+            }
+            .field-tip {
+                margin-top: 0.25rem;
+                color: var(--text-muted);
+                font-size: 0.72rem;
+                line-height: 1.35;
+            }
+            .date-input-wrap {
+                position: relative;
+            }
+            .date-input-wrap .form-control {
+                padding-right: 2rem;
+            }
+            .date-input-wrap::after {
+                content: "\F1F6";
+                position: absolute;
+                top: 50%;
+                right: 0.65rem;
+                transform: translateY(-50%);
+                color: var(--text-muted);
+                font-family: "bootstrap-icons";
+                font-size: 0.9rem;
+                pointer-events: none;
+            }
+            .date-input-wrap:focus-within::after {
+                color: var(--primary);
+            }
+            .flatpickr-calendar {
+                background: linear-gradient(180deg, rgba(24, 34, 54, 0.98), rgba(15, 23, 38, 0.98));
+                border: 1px solid rgba(111, 166, 255, 0.18);
+                border-radius: 14px;
+                box-shadow: 0 14px 34px rgba(0, 0, 0, 0.34);
+                overflow: hidden;
+            }
+            .flatpickr-calendar.arrowTop::before,
+            .flatpickr-calendar.arrowTop::after,
+            .flatpickr-calendar.arrowBottom::before,
+            .flatpickr-calendar.arrowBottom::after {
+                display: none;
+            }
+            .flatpickr-months,
+            .flatpickr-weekdays {
+                background: rgba(0, 0, 0, 0.12);
+            }
+            .flatpickr-months .flatpickr-month,
+            .flatpickr-current-month .flatpickr-monthDropdown-months,
+            .flatpickr-weekdays,
+            span.flatpickr-weekday,
+            .flatpickr-day,
+            .flatpickr-time input,
+            .flatpickr-time .flatpickr-am-pm {
+                color: var(--text-light);
+            }
+            .flatpickr-months .flatpickr-month {
+                fill: var(--text-light);
+                height: 42px;
+            }
+            .flatpickr-current-month {
+                padding-top: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 6px;
+                font-size: 0.88rem;
+                line-height: 1;
+            }
+            .flatpickr-current-month .flatpickr-monthDropdown-months,
+            .flatpickr-current-month input.cur-year {
+                color: var(--text-light);
+                font-weight: 600;
+                font-size: 0.82rem;
+            }
+            .flatpickr-current-month .flatpickr-monthDropdown-months {
+                color: #e8eff9;
+                font-size: 0.78rem;
+                appearance: none;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                min-width: 88px;
+                height: 30px;
+                margin: 0;
+                padding: 0 30px 0 10px;
+                border: 1px solid rgba(111, 166, 255, 0.22);
+                border-radius: 10px;
+                background-image:
+                    linear-gradient(45deg, transparent 50%, rgba(232, 239, 249, 0.82) 50%),
+                    linear-gradient(135deg, rgba(232, 239, 249, 0.82) 50%, transparent 50%),
+                    linear-gradient(180deg, rgba(24, 34, 54, 0.98), rgba(15, 23, 38, 0.98));
+                background-position:
+                    calc(100% - 16px) calc(50% - 1px),
+                    calc(100% - 11px) calc(50% - 1px),
+                    0 0;
+                background-size: 5px 5px, 5px 5px, 100% 100%;
+                background-repeat: no-repeat;
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 0 0 1px rgba(15, 23, 38, 0.12);
+                cursor: pointer;
+                line-height: 28px;
+                vertical-align: top;
+                transition: border-color 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+            }
+            .flatpickr-current-month .flatpickr-monthDropdown-months:hover,
+            .flatpickr-current-month .flatpickr-monthDropdown-months:focus {
+                border-color: rgba(111, 166, 255, 0.28);
+                background-image:
+                    linear-gradient(45deg, transparent 50%, rgba(232, 239, 249, 0.82) 50%),
+                    linear-gradient(135deg, rgba(232, 239, 249, 0.82) 50%, transparent 50%),
+                    linear-gradient(180deg, rgba(24, 34, 54, 0.98), rgba(15, 23, 38, 0.98));
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 0 0 1px rgba(15, 23, 38, 0.12);
+                filter: brightness(1.03);
+                outline: none;
+            }
+            .flatpickr-current-month .flatpickr-monthDropdown-months option {
+                color: #e8eff9;
+                background: #182236;
+            }
+            .flatpickr-current-month .flatpickr-monthDropdown-months option:checked,
+            .flatpickr-current-month .flatpickr-monthDropdown-months option:hover {
+                color: #ffffff;
+                background: #28344c;
+            }
+            .flatpickr-current-month .numInputWrapper {
+                display: inline-flex;
+                align-items: stretch;
+                width: 82px;
+                height: 30px;
+                margin: 0;
+                border: 1px solid rgba(111, 166, 255, 0.22);
+                border-radius: 10px;
+                background: linear-gradient(180deg, rgba(24, 34, 54, 0.98), rgba(15, 23, 38, 0.98));
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 0 0 1px rgba(15, 23, 38, 0.12);
+                overflow: hidden;
+                vertical-align: top;
+                transition: border-color 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+            }
+            .flatpickr-current-month input.cur-year {
+                height: 100%;
+                width: 100%;
+                min-width: 0;
+                margin: 0;
+                padding: 0 24px 0 10px;
+                border-radius: 0;
+                background: transparent;
+                text-align: left;
+                line-height: 28px;
+            }
+            .flatpickr-current-month input.cur-year::-webkit-outer-spin-button,
+            .flatpickr-current-month input.cur-year::-webkit-inner-spin-button {
+                opacity: 0;
+                margin: 0;
+            }
+            .flatpickr-current-month input.cur-year:focus {
+                background: rgba(255, 255, 255, 0.02);
+                outline: none;
+            }
+            .numInputWrapper:hover {
+                border-color: rgba(111, 166, 255, 0.28);
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 0 0 1px rgba(15, 23, 38, 0.12);
+                filter: brightness(1.03);
+            }
+            .numInputWrapper span {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 22px;
+                height: 50%;
+                opacity: 1;
+                right: 0;
+                border-left: 1px solid rgba(111, 166, 255, 0.12);
+                background: rgba(255, 255, 255, 0.08);
+                transition: background 0.2s ease;
+            }
+            .numInputWrapper span.arrowUp {
+                top: 0;
+                border-bottom: 1px solid rgba(111, 166, 255, 0.1);
+            }
+            .numInputWrapper span.arrowDown {
+                top: 50%;
+            }
+            .numInputWrapper span:hover {
+                background: rgba(255, 255, 255, 0.14);
+            }
+            .numInputWrapper span.arrowUp:after {
+                border-bottom-color: rgba(255, 255, 255, 0.98);
+            }
+            .numInputWrapper span.arrowDown:after {
+                border-top-color: rgba(255, 255, 255, 0.98);
+            }
+            .numInputWrapper span.arrowUp:hover:after {
+                border-bottom-color: rgba(255, 255, 255, 0.96);
+            }
+            .numInputWrapper span.arrowDown:hover:after {
+                border-top-color: rgba(255, 255, 255, 0.96);
+            }
+            .flatpickr-months .flatpickr-prev-month svg,
+            .flatpickr-months .flatpickr-next-month svg {
+                fill: var(--text-light);
+            }
+            .flatpickr-months .flatpickr-prev-month,
+            .flatpickr-months .flatpickr-next-month {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 30px;
+                height: 30px;
+                padding: 0;
+                border-radius: 10px;
+                top: 5px;
+                border: 1px solid rgba(111, 166, 255, 0.18);
+                background: linear-gradient(180deg, rgba(24, 34, 54, 0.98), rgba(15, 23, 38, 0.98));
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            }
+            .flatpickr-months .flatpickr-prev-month:hover,
+            .flatpickr-months .flatpickr-next-month:hover {
+                background: linear-gradient(180deg, rgba(24, 34, 54, 0.98), rgba(15, 23, 38, 0.98));
+                border-color: rgba(111, 166, 255, 0.28);
+            }
+            span.flatpickr-weekday {
+                color: rgba(232, 239, 249, 0.68);
+                font-weight: 600;
+            }
+            .flatpickr-days {
+                padding: 6px 8px 10px;
+            }
+            .flatpickr-day {
+                border-radius: 10px;
+                border: 1px solid transparent;
+                color: var(--text-light);
+            }
+            .flatpickr-day.today {
+                border-color: rgba(111, 166, 255, 0.45);
+                color: #a9c9ff;
+            }
+            .flatpickr-day.today:hover,
+            .flatpickr-day.today:focus {
+                border-color: rgba(111, 166, 255, 0.7);
+                background: rgba(111, 166, 255, 0.18);
+            }
+            .flatpickr-day:hover,
+            .flatpickr-day:focus {
+                background: rgba(111, 166, 255, 0.18);
+                border-color: rgba(111, 166, 255, 0.18);
+            }
+            .flatpickr-day.selected,
+            .flatpickr-day.startRange,
+            .flatpickr-day.endRange,
+            .flatpickr-day.selected:hover,
+            .flatpickr-day.startRange:hover,
+            .flatpickr-day.endRange:hover {
+                background: var(--primary);
+                border-color: var(--primary);
+            }
+            .flatpickr-day.inRange,
+            .flatpickr-day.prevMonthDay.inRange,
+            .flatpickr-day.nextMonthDay.inRange {
+                background: rgba(111, 166, 255, 0.12);
+                border-color: rgba(111, 166, 255, 0.04);
+                box-shadow: none;
+            }
+            .flatpickr-day.prevMonthDay,
+            .flatpickr-day.nextMonthDay,
+            .flatpickr-day.flatpickr-disabled,
+            .flatpickr-day.flatpickr-disabled:hover {
+                color: rgba(157, 175, 198, 0.38);
+            }
+            .faxh-group {
+                opacity: 0.5;
+            }
+            .faxh-group.active {
+                opacity: 1;
+            }
+            .section-title {
+                font-size: 1rem;
+                font-weight: 600;
+                color: var(--text-light);
+                margin-bottom: 12px;
+                display: flex;
+                align-items: center;
+            }
+            .section-title i {
+                margin-right: 8px;
+                color: var(--primary);
+            }
+            textarea.form-control {
+                min-height: calc(2.5em + 0.5rem + 2px);
+            }
+            .input-group-text {
+                background-color: rgba(0,0,0,0.2);
+                border: 1px solid var(--border-color);
+                color: var(--text-light);
+            }
+            .restore-area-btn {
+                background-color: rgba(0,0,0,0.2);
+                border-color: var(--border-color);
+                color: var(--text-light);
+            }
+            .restore-area-btn:hover {
+                background-color: rgba(111, 166, 255, 0.18);
+                border-color: var(--primary);
+                color: var(--text-light);
+            }
+            .area-help-text {
+                color: var(--text-muted);
+                font-size: 0.75rem;
+                margin-top: 0.25rem;
+            }
+            .map-card {
+                flex: 1 1 auto;
+                min-height: 0;
+                margin-bottom: 0;
+                display: flex;
+                flex-direction: column;
+                position: relative;
+            }
+            .form-check-input {
+                background-color: rgba(0,0,0,0.2);
+                border: 1px solid var(--border-color);
+            }
+            .form-check-input:checked {
+                background-color: var(--primary);
+                border-color: var(--primary);
+            }
+            .form-check-label {
+                font-size: 0.85rem;
+                color: var(--text-muted);
+                margin-left: 5px;
+            }
+            .map-tools {
+                margin-top: 10px;
+                display: flex;
+                justify-content: space-between;
+            }
+            .map-tools .btn {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.8rem;
+            }
+            .log-entry {
+                margin-bottom: 0;
+                min-width: 0;
+                padding: 4px 0;
+                border-bottom: 1px solid rgba(255,255,255,0.05);
+                overflow-wrap: anywhere;
+                break-inside: avoid-column;
+                -webkit-column-break-inside: avoid;
+            }
+            .log-entry.error {
+                color: #ff6b6b;
+            }
+            .log-entry.warning {
+                color: #ffd166;
+            }
+            /* 结果数据行（坐标 / 面积 / 行政区）：蓝色系，突出但不刺眼 */
+            .log-entry.result {
+                color: #7cc7ff;
+                font-weight: 600;
+                font-size: 0.82rem;
+                background: rgba(111, 166, 255, 0.10);
+                border-left: 2px solid rgba(111, 166, 255, 0.75);
+                border-radius: 3px;
+                padding: 4px 6px;
+                margin: 2px 0;
+            }
+            .log-entry.result .log-time {
+                color: rgba(124, 199, 255, 0.75);
+            }
+            /* 完成状态行（成果包 / 配置文件已就绪）：绿色 */
+            .log-entry.success {
+                color: #6ee7a0;
+                font-weight: 700;
+                font-size: 0.82rem;
+                background: rgba(110, 231, 160, 0.10);
+                border-left: 2px solid rgba(110, 231, 160, 0.75);
+                border-radius: 3px;
+                padding: 4px 6px;
+                margin: 2px 0;
+            }
+            .log-entry.success .log-time {
+                color: rgba(110, 231, 160, 0.75);
+            }
+            .log-entry.highlight {
+                color: #ffe082;
+                font-weight: 700;
+                font-size: 0.84rem;
+                background: rgba(255, 208, 0, 0.12);
+                border: 1px solid rgba(255, 208, 0, 0.28);
+                border-radius: 4px;
+                padding: 4px 6px;
+                margin-top: 4px;
+            }
+            .log-entry.highlight .log-time {
+                color: #fff1b8;
+            }
+            .log-entry.highlight .log-message {
+                letter-spacing: 0.2px;
+            }
+            .log-time {
+                color: var(--text-muted);
+                margin-right: 5px;
+                font-size: 0.7rem;
+            }
+            .log-icon {
+                margin-right: 5px;
+            }
+            .meridian-select-group {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin-top: 8px;
+            }
+            .meridian-select-group > .form-label {
+                flex: 0 0 64px;
+                margin-bottom: 0;
+                font-size: 0.78rem;
+                color: var(--text-muted);
+                text-align: right;
+            }
+            .meridian-select-group > .form-select {
+                flex: 1 1 auto;
+                min-width: 0;
+            }
+            /* 面板标题右侧的小按钮（载入地块信息） */
+            .section-title .title-action {
+                margin-left: auto;
+                flex: 0 0 auto;
+                font-size: 0.75rem;
+                padding: 0.2rem 0.5rem;
+                border-color: var(--border-color);
+                color: var(--text-muted);
+            }
+            .section-title .title-action:hover {
+                background-color: rgba(111, 166, 255, 0.18);
+                border-color: var(--primary);
+                color: var(--text-light);
+            }
+            .map-capture-area {
+                position: relative;
+                flex: 1 1 auto;
+                min-height: 0;
+            }
+            .map-title {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                z-index: 1000;
+                background-color: rgba(0,0,0,0);
+                padding: 2px 8px;
+                border-radius: 4px;
+                color: red;
+                font-weight: bold;
+                font-size: 18px;
+                # text-shadow: 1px 1px 2px rgba(0,0,0,1);
+            }
+            .is-invalid {
+                border-color: #dc3545 !important;
+                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+                background-repeat: no-repeat;
+                background-position: right calc(0.375em + 0.1875rem) center;
+                background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+            }
+
+            .is-invalid:focus {
+                box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25) !important;
+            }
+
+            .invalid-feedback {
+                display: none;
+                width: 100%;
+                margin-top: 0.25rem;
+                font-size: .875em;
+                color: #dc3545;
+            }
+
+            .is-invalid ~ .invalid-feedback {
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container-fluid app-container">
+            <!-- 一屏三栏：左（上传 + 地图）/ 中（地块参数）/ 右（日志） -->
+            <!-- flex-nowrap：三栏必须同排（否则窄/高窗口下右栏会换行变成整行宽） -->
+            <div class="row g-2 h-100 flex-nowrap">
+                <!-- 左栏（4 格：比原 3 格宽、比 5 格收敛，地图框更接近方形；高度不变） -->
+                <div class="col-lg-4 col-shell left-shell d-flex flex-column gap-2">
+                    <div class="param-card upload-card">
+                        <div class="section-title">
+                            <i class="bi bi-upload"></i>
+                            <span>边界文件上传</span>
+                        </div>
+                        <div class="upload-panel-content">
+                        <div class="upload-row">
+                            <div class="file-upload-compact" onclick="document.getElementById('boundary_files').click()">
+                                <input type="file" id="boundary_files" class="d-none"
+                                    accept=".shp,.shx,.dbf,.prj,.dxf,.kml,.kmz,.xlsx,.xls,.csv,.txt" multiple
+                                    onchange="updateFileDisplay(this, 'boundary')">
+
+                                <div id="boundaryDisplay">
+                                    <i class="bi bi-file-earmark-zip compact-icon"></i>
+                                    <span>上传 Shapefile / dxf / kml / kmz / xlsx / xls / csv / txt</span>
+                                </div>
+                            </div>
+                            <!-- 样例数据：一键导入（上传文件 + 地块信息），旁边的图标按钮用于下载样例 -->
+                            <div class="btn-group btn-group-sm sample-group" role="group">
+                                <button type="button" class="btn btn-outline-secondary"
+                                        onclick="loadSampleData()" title="载入样例数据（含地块信息）">样例数据</button>
+                                <a class="btn btn-outline-secondary" href="./samples/样例数据.xls" download
+                                   title="下载样例数据">
+                                    <i class="bi bi-download"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                            <div class="meridian-select-group">
+                                <label class="form-label" for="central_meridian">中央经线</label>
+                                <select class="form-select form-select-sm" id="central_meridian">
+                                    <option value="手动指定">手动指定</option>
+                                    <option value="72">72°</option>
+                                    <option value="75">75°</option>
+                                    <option value="78">78°</option>
+                                    <option value="81">81°</option>
+                                    <option value="84">84°</option>
+                                    <option value="87">87°</option>
+                                    <option value="90">90°</option>
+                                    <option value="93">93°</option>
+                                    <option value="96">96°</option>
+                                    <option value="99">99°</option>
+                                    <option value="102">102°</option>
+                                    <option value="105">105°</option>
+                                    <option value="108">108°</option>
+                                    <option value="111">111°</option>
+                                    <option value="114">114°</option>
+                                    <option value="117">117°</option>
+                                    <option value="120">120°</option>
+                                    <option value="123">123°</option>
+                                    <option value="126">126°</option>
+                                    <option value="129">129°</option>
+                                    <option value="132">132°</option>
+                                    <option value="135">135°</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- 地图预览（与上传同列，撑满剩余高度） -->
+                    <div class="param-card map-card">
+                        <div class="section-title">
+                            <i class="bi bi-map"></i>
+                            <span>边界位置预览</span>
+                        </div>
+                        <div class="map-capture-area" id="mapCaptureArea">
+                            <div id="previewMap"></div>
+                            <div class="map-title" id="mapTitle"></div>
+                        </div>
+                        <div class="map-tools">
+                            <div>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="zoomToBounds()" title="缩放到边界">
+                                    <i class="bi bi-fullscreen"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="clearPreview()" title="清除预览">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="saveScreenshot()" title="截图保存">
+                                    <i class="bi bi-camera"></i>
+                                </button>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="packImages" checked>
+                                <label class="form-check-label" for="packImages">图片打包</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 中栏：地块参数（单列，标签与控件同行，一屏放下） -->
+                <div class="col-lg-4 col-shell mid-shell d-flex flex-column">
+                    <div class="param-card input-card">
+                        <div class="section-title">
+                            <i class="bi bi-card-checklist"></i>
+                            <span>地块参数录入</span>
+                            <!-- 载入上次生成的同名字段值配置（提交成果时自动下载） -->
+                            <input type="file" id="config_file" class="d-none" accept=".json"
+                                   onchange="handleConfigFile(this)">
+                            <button type="button" class="btn btn-sm btn-outline-secondary title-action"
+                                    onclick="document.getElementById('config_file').click()"
+                                    title="选择同名配置文件（xxx.地块参数.json）自动回填参数">
+                                <i class="bi bi-sliders"></i> 载入地块信息
+                            </button>
+                        </div>
+                        <div class="params-body">
+                            <div class="field-row textarea-row">
+                                <label class="form-label" for="dkmc">地块名称</label>
+                                <div class="field-control">
+                                    <textarea class="form-control form-control-sm" id="dkmc" rows="2" required></textarea>
+                                    <div class="invalid-feedback">请填写地块名称</div>
+                                </div>
+                            </div>
+
+                            <div class="field-row">
+                                <label class="form-label" for="dkdm">地块代码</label>
+                                <div class="field-control">
+                                    <input type="text" class="form-control form-control-sm" id="dkdm" required>
+                                    <div class="invalid-feedback">请填写地块代码</div>
+                                </div>
+                            </div>
+
+                                <div class="field-row">
+                                    <label class="form-label" for="scjd">调查阶段</label>
+                                    <div class="field-control">
+                                        <!-- 下拉可选、也可直接输入（保留下拉按钮，不再有"自定义"和重置按钮） -->
+                                        <input type="text" class="form-control form-control-sm" id="scjd"
+                                               list="scjdOptions" maxlength="100" autocomplete="off"
+                                               value="地块调查" placeholder="选择或直接输入">
+                                        <datalist id="scjdOptions">
+                                            <option value="地块调查"></option>
+                                            <option value="初步调查"></option>
+                                            <option value="详细调查"></option>
+                                            <option value="风险评估"></option>
+                                            <option value="风险管控"></option>
+                                            <option value="修复"></option>
+                                            <option value="管控及修复"></option>
+                                            <option value="风险管控效果评估"></option>
+                                            <option value="修复效果评估"></option>
+                                            <option value="管控及修复效果评估"></option>
+                                        </datalist>
+                                        <div class="invalid-feedback">请填写调查阶段（不超过 100 字）</div>
+                                    </div>
+                                </div>
+
+                            <div class="field-row">
+                                <label class="form-label" for="scrq">调查日期</label>
+                                <div class="field-control">
+                                    <div class="date-input-wrap">
+                                        <input type="text" class="form-control form-control-sm" id="scrq" placeholder="支持粘贴 2026-04-20 / 2026年4月20日 / 20260420" autocomplete="off" inputmode="numeric">
+                                        <div class="invalid-feedback">请填写有效的调查日期</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field-row textarea-row">
+                                <label class="form-label" for="scdw">生产单位</label>
+                                <div class="field-control">
+                                    <textarea class="form-control form-control-sm" id="scdw" rows="2" required></textarea>
+                                    <div class="invalid-feedback">请填写生产单位</div>
+                                </div>
+                            </div>
+
+                                <div class="field-row faxh-group" id="faxhGroup">
+                                    <label class="form-label" for="faxh">方案序号</label>
+                                    <div class="field-control">
+                                        <input type="text" class="form-control form-control-sm" id="faxh" disabled required
+                                               maxlength="2" inputmode="numeric" placeholder="01–99">
+                                        <div class="invalid-feedback">该调查阶段需要方案序号（01–99，两位数字）</div>
+                                    </div>
+                                </div>
+
+                            <div class="field-row">
+                                <label class="form-label" for="xzqdm">行政区代码</label>
+                                <div class="field-control">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control form-control-sm" id="xzqdm" maxlength="12"
+                                               inputmode="numeric" placeholder="预览后自动回填，可人工修正">
+                                        <button type="button" class="btn btn-outline-secondary restore-area-btn" onclick="restoreRegionField('xzqdm')" title="恢复为系统识别值">
+                                            <i class="bi bi-arrow-counterclockwise"></i>
+                                        </button>
+                                    </div>
+                                    <div class="invalid-feedback">行政区代码只能是数字，最多 12 位</div>
+                                </div>
+                            </div>
+
+                            <div class="field-row">
+                                <label class="form-label" for="xzqmc">行政区名称</label>
+                                <div class="field-control">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control form-control-sm" id="xzqmc" maxlength="100"
+                                               placeholder="预览后自动回填，可人工修正">
+                                        <button type="button" class="btn btn-outline-secondary restore-area-btn" onclick="restoreRegionField('xzqmc')" title="恢复为系统识别值">
+                                            <i class="bi bi-arrow-counterclockwise"></i>
+                                        </button>
+                                    </div>
+                                    <div class="invalid-feedback">行政区名称不能超过 100 字</div>
+                                </div>
+                            </div>
+
+                            <div class="field-row">
+                                <label class="form-label" for="ydmj">用地面积</label>
+                                <div class="field-control">
+                                    <div class="input-group input-group-sm">
+                                        <input type="number" class="form-control form-control-sm" id="ydmj" step="0.01" min="0" placeholder="预览后自动回填几何面积">
+                                        <span class="input-group-text">平方米</span>
+                                        <button type="button" class="btn btn-outline-secondary restore-area-btn" onclick="restoreGeometryArea()" title="恢复为图斑几何面积">
+                                            <i class="bi bi-arrow-counterclockwise"></i>
+                                        </button>
+                                    </div>
+                                    <div class="invalid-feedback">用地面积必须是大于或等于0的数字</div>
+                                </div>
+                            </div>
+
+                            <div class="field-row textarea-row">
+                                <label class="form-label" for="bz">备注信息</label>
+                                <div class="field-control">
+                                    <textarea class="form-control form-control-sm" id="bz" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 处理按钮 -->
+                        <button id="processBtn" class="btn process-btn rounded-3" data-usage-submit onclick="processData()">
+                            <i class="bi bi-check-circle me-2"></i>提交参数
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 右栏：日志记录（收窄，把宽度让给左栏/中栏；撑满一屏，内部滚动） -->
+                <div class="col-lg-3 col-shell right-shell d-flex flex-column">
+                    <div class="param-card console-card flex-fill">
+                        <div class="section-title">
+                            <i class="bi bi-journal-text"></i>
+                            <span>日志记录</span>
+                        </div>
+                        <div class="console-area" id="consoleViewport">
+                            <div class="console-flow" id="console"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="./prototype-assets.js"></script>
+        <script src="./prototype-bridge.js"></script>
+        <script src="./static/js/app.js"></script>
+        <script src="./prototype-shell.js"></script>
+
+    </body>
+    </html>

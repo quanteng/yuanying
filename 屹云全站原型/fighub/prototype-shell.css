@@ -1,0 +1,366 @@
+/* Floating navigation belongs to the hand-off shell, not the product UI. */
+.proto-dock {
+  position: fixed;
+  left: 18px;
+  bottom: 18px;
+  z-index: 7000;
+  font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+  color: #111827;
+}
+
+[data-drawer-login][hidden] {
+  display: none !important;
+}
+
+.proto-dock__toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 13px 0 9px;
+  border: 1px solid rgba(17, 24, 39, .16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .96);
+  color: #111827;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, .18);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+}
+
+.proto-dock__toggle small {
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: #f4f4f5;
+  color: #71717a;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.proto-dock__mark {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #111827;
+  color: #fff;
+  font: 800 12px/1 ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.proto-dock__panel {
+  position: absolute;
+  left: 0;
+  bottom: 52px;
+  display: none;
+  width: min(360px, calc(100vw - 36px));
+  max-height: min(720px, calc(100vh - 92px));
+  overflow: hidden;
+  border: 1px solid rgba(17, 24, 39, .14);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .98);
+  box-shadow: 0 24px 70px rgba(15, 23, 42, .28);
+  backdrop-filter: blur(18px);
+}
+
+.proto-dock.is-open .proto-dock__panel {
+  display: flex;
+  flex-direction: column;
+  animation: proto-dock-in .16s ease-out;
+}
+
+@keyframes proto-dock-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.proto-dock__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid #eceff3;
+}
+
+.proto-dock__head div {
+  display: grid;
+  gap: 3px;
+}
+
+.proto-dock__head strong {
+  font-size: 16px;
+}
+
+.proto-dock__eyebrow {
+  color: #71717a;
+  font: 700 9px/1.3 ui-monospace, SFMono-Regular, Consolas, monospace;
+  letter-spacing: .08em;
+}
+
+.proto-dock__x {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #e4e4e7;
+  border-radius: 8px;
+  background: #fff;
+  color: #52525b;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.proto-dock__state {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #f0f1f3;
+  color: #71717a;
+  font-size: 11px;
+}
+
+.proto-dock__segmented {
+  display: flex;
+  padding: 2px;
+  border-radius: 9px;
+  background: #f4f4f5;
+}
+
+.proto-dock__segmented button {
+  min-width: 52px;
+  padding: 5px 8px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #71717a;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.proto-dock__segmented button.is-active {
+  background: #fff;
+  color: #111827;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, .12);
+  font-weight: 700;
+}
+
+.proto-dock__body {
+  min-height: 0;
+  overflow: auto;
+  padding: 4px 10px 12px;
+}
+
+.proto-dock__body details {
+  border-bottom: 1px solid #f0f1f3;
+}
+
+.proto-dock__body summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 6px;
+  color: #27272a;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.proto-dock__body summary span {
+  color: #a1a1aa;
+  font: 600 10px/1 ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.proto-dock__links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  padding: 0 2px 10px;
+}
+
+.proto-dock__links a {
+  min-width: 0;
+  padding: 7px 8px;
+  border-radius: 7px;
+  color: #3f3f46;
+  font-size: 11.5px;
+  line-height: 1.35;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proto-dock__links a:hover {
+  background: #f4f4f5;
+  color: #111827;
+}
+
+.proto-dock__scenarios {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  padding: 0 2px 12px;
+}
+
+.proto-dock__scenarios button {
+  min-height: 34px;
+  padding: 7px 8px;
+  border: 1px solid #e4e4e7;
+  border-radius: 8px;
+  background: #fff;
+  color: #3f3f46;
+  font: inherit;
+  font-size: 11px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.proto-dock__scenarios button:hover {
+  border-color: #a1a1aa;
+  background: #fafafa;
+}
+
+.proto-dock__foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 16px;
+  border-top: 1px solid #eceff3;
+  background: #fafafa;
+  font-size: 11px;
+}
+
+.proto-dock__foot a,
+.proto-dock__foot button {
+  border: 0;
+  background: transparent;
+  color: #52525b;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.proto-dock__foot a:hover,
+.proto-dock__foot button:hover {
+  color: #111827;
+  text-decoration: underline;
+}
+
+/* The real drawer only shows below the mobile breakpoint. This preview flag
+   lets a reviewer inspect it without resizing the browser. */
+.proto-force-drawer .site-drawer:not([hidden]) {
+  position: fixed;
+  inset: 0;
+  z-index: 6900;
+  display: block;
+}
+
+.proto-force-drawer .site-drawer__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 38, .42);
+}
+
+.proto-force-drawer .site-drawer__panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(342px, 88vw);
+  padding: 24px 20px 20px;
+  background: var(--card-surface, #fff);
+  box-shadow: -18px 0 50px rgba(15, 23, 42, .22);
+}
+
+.proto-force-drawer .site-drawer__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.proto-force-drawer .site-drawer__heading strong {
+  font-size: 18px;
+}
+
+.proto-force-drawer .site-drawer__nav {
+  display: grid;
+  gap: 2px;
+  margin-top: 18px;
+}
+
+.proto-force-drawer .site-drawer__nav a {
+  display: flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 0 12px;
+  border-radius: 8px;
+  color: var(--ink, #17293a);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.proto-force-drawer .site-drawer__actions {
+  display: grid;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.proto-force-drawer html,
+.proto-force-drawer body {
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  .proto-dock {
+    left: 12px;
+    bottom: 76px;
+  }
+  .proto-dock__panel {
+    max-height: calc(100vh - 132px);
+  }
+}
+
+@media (max-width: 760px) {
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+  .admin-page .container,
+  .admin-layout,
+  .admin-main,
+  .admin-card,
+  .admin-main .table-wrap {
+    min-width: 0;
+  }
+  .admin-sidebar {
+    position: static;
+    overflow-x: auto;
+  }
+  .admin-sidebar__inner {
+    flex-direction: row;
+    gap: 6px;
+    max-height: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .admin-nav-group {
+    flex: 0 0 auto;
+    min-width: 112px;
+  }
+  .admin-nav-group__title {
+    margin: 0 0 4px;
+    padding: 0 8px;
+    font-size: 9px;
+  }
+  .admin-nav-item {
+    min-height: 34px;
+    white-space: nowrap;
+  }
+}

@@ -1,0 +1,6 @@
+/* Review builds should show every section in full-page captures. */
+.reveal,
+.reveal.is-visible {
+  opacity: 1 !important;
+  transform: none !important;
+}

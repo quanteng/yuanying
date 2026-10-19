@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="">
+  <title></title>
+  <link rel="icon" type="image/svg+xml" href="./images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32.png">
+  <link rel="icon" href="./images/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="./images/apple-touch-icon.png">
+  <meta name="theme-color" content="#5296FF">
+  <link rel="stylesheet" href="./styles.css?v=20261010">
+  <link rel="stylesheet" href="./prototype-shell.css">
+  <script src="./libs.js?v=20261010"></script>
+</head>
+<body>
+  <svg class="icon-sprite" aria-hidden="true" focusable="false">
+    <symbol id="icon-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"></rect><rect x="14" y="4" width="6" height="6" rx="1"></rect><rect x="4" y="14" width="6" height="6" rx="1"></rect><rect x="14" y="14" width="6" height="6" rx="1"></rect></symbol>
+    <symbol id="icon-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="7" ry="3"></ellipse><path d="M5 5.5v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"></path><path d="M5 11.5v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"></path></symbol>
+    <symbol id="icon-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"></circle><path d="m15.5 8.5-2.2 4.8-4.8 2.2 2.2-4.8 4.8-2.2Z"></path></symbol>
+    <symbol id="icon-map" viewBox="0 0 24 24"><path d="m3 6 6-2 6 2 6-2v14l-6 2-6-2-6 2V6Z"></path><path d="M9 4v14M15 6v14"></path></symbol>
+    <symbol id="icon-report" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6V3Z"></path><path d="M14 3v5h5M9 12h6M9 16h6"></path></symbol>
+    <symbol id="icon-shield-check" viewBox="0 0 24 24"><path d="M12 3 19 6v5c0 4.7-2.9 8.2-7 10-4.1-1.8-7-5.3-7-10V6l7-3Z"></path><path d="m8.5 12 2.2 2.2 4.8-5"></path></symbol>
+    <symbol id="icon-layers" viewBox="0 0 24 24"><path d="m12 4 8 4-8 4-8-4 8-4Z"></path><path d="m4 12 8 4 8-4M4 16l8 4 8-4"></path></symbol>
+    <symbol id="icon-file-check" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6V3Z"></path><path d="M14 3v5h5M9 15l2 2 4-4"></path></symbol>
+    <symbol id="icon-wallet" viewBox="0 0 24 24"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4H19v16H6.5A2.5 2.5 0 0 1 4 17.5v-11Z"></path><path d="M4 7h15M15 12h5v4h-5a2 2 0 0 1 0-4Z"></path><circle cx="16" cy="14" r=".7" fill="currentColor" stroke="none"></circle></symbol>
+    <symbol id="icon-wechat" viewBox="0 0 24 24"><path d="M9.6 4.5C6 4.5 3.1 6.9 3.1 9.8c0 1.6.9 3 2.3 4l-.6 2 2.3-1.2c.7.2 1.5.3 2.3.3"></path><path d="M14.9 8.6c-3.4 0-6.2 2.2-6.2 4.9s2.8 4.9 6.2 4.9c.6 0 1.2-.1 1.8-.2l2 1-.5-1.8c1.2-.9 1.9-2.1 1.9-3.5 0-2.7-2.8-4.9-6.2-4.9Z"></path><circle cx="7.4" cy="8.9" r=".8" fill="currentColor" stroke="none"></circle><circle cx="11.6" cy="8.9" r=".8" fill="currentColor" stroke="none"></circle></symbol>
+    <symbol id="icon-qrcode" viewBox="0 0 24 24"><rect x="2.5" y="2.5" width="8" height="8" rx="2"></rect><rect x="13.5" y="2.5" width="8" height="8" rx="2"></rect><rect x="2.5" y="13.5" width="8" height="8" rx="2"></rect><rect x="5" y="5" width="3" height="3" rx=".6" fill="currentColor" stroke="none"></rect><rect x="16" y="5" width="3" height="3" rx=".6" fill="currentColor" stroke="none"></rect><rect x="5" y="16" width="3" height="3" rx=".6" fill="currentColor" stroke="none"></rect><path d="M14 14h3.5M14 17h2.5M14 20.5h3.5M19.5 14v6.5M22 17.5h-.5"></path></symbol>
+    <symbol id="icon-desktop" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="12.5" rx="2"></rect><path d="M8.5 20h7M12 16.5V20"></path></symbol>
+    <symbol id="icon-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="4"></circle><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"></circle></symbol>
+    <symbol id="icon-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"></circle><path d="M4 12h16M12 4c2.1 2.2 3.1 4.9 3.1 8S14.1 17.8 12 20c-2.1-2.2-3.1-4.9-3.1-8S9.9 6.2 12 4Z"></path></symbol>
+    <symbol id="icon-route" viewBox="0 0 24 24"><circle cx="6" cy="18" r="2"></circle><circle cx="18" cy="6" r="2"></circle><path d="M8 18h2.5a3.5 3.5 0 0 0 3.5-3.5v-5A3.5 3.5 0 0 1 17.5 6H16"></path></symbol>
+    <symbol id="icon-expand" viewBox="0 0 24 24"><path d="M8 4H4v4M16 4h4v4M20 16v4h-4M4 16v4h4"></path><path d="M4 8 9 3M20 8l-5-5M20 16l-5 5M4 16l5 5"></path></symbol>
+    <symbol id="icon-refresh" viewBox="0 0 24 24"><path d="M19 8a7.5 7.5 0 0 0-13.5-1.5L4 9"></path><path d="M4 5v4h4M5 16a7.5 7.5 0 0 0 13.5 1.5L20 15"></path><path d="M20 19v-4h-4"></path></symbol>
+    <symbol id="icon-eye" viewBox="0 0 24 24"><path d="M3 12s3.2-6 9-6 9 6 9 6-3.2 6-9 6-9-6-9-6Z"></path><circle cx="12" cy="12" r="2.5"></circle></symbol>
+    <symbol id="icon-badge-check" viewBox="0 0 24 24"><path d="m12 3 2 1.2 2.3-.2 1.2 2 2 1.2-.2 2.3 1.2 2-1.2 2 .2 2.3-2 1.2-1.2 2-2.3-.2-2 1.2-2-1.2-2.3.2-1.2-2-2-1.2.2-2.3-1.2-2 1.2-2-.2-2.3 2-1.2 1.2-2 2.3.2 2-1.2Z"></path><path d="m8.5 12 2.2 2.2 4.8-5"></path></symbol>
+    <symbol id="icon-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5"></path><path d="m6 11 6-6 6 6"></path></symbol>
+    <symbol id="icon-heart" viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.1-8.8 10.1-8.8 10.1S3.2 13.9 3.2 8.8A4.3 4.3 0 0 1 12 6.7a4.3 4.3 0 0 1 8.8 2.1Z"></path></symbol>
+    <symbol id="icon-share" viewBox="0 0 24 24"><path d="M14 5h5v5M19 5l-8 8"></path><path d="M19 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"></path></symbol>
+    <symbol id="icon-mail" viewBox="0 0 24 24"><rect x="3.5" y="5.5" width="17" height="13" rx="2"></rect><path d="m4.5 7.5 7.5 5.8 7.5-5.8"></path></symbol>
+    <symbol id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"></circle><path d="M12 2.5v2M12 19.5v2M4.5 4.5l1.4 1.4M18.1 18.1l1.4 1.4M2.5 12h2M19.5 12h2M4.5 19.5l1.4-1.4M18.1 5.9l1.4-1.4"></path></symbol>
+    <symbol id="icon-moon" viewBox="0 0 24 24"><path d="M19.5 14.4A7.8 7.8 0 0 1 9.6 4.5 8.1 8.1 0 1 0 19.5 14.4Z"></path></symbol>
+    <symbol id="icon-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
+    <symbol id="icon-home" viewBox="0 0 24 24"><path d="M4 10.5 12 4l8 6.5V20H4v-9.5Z"></path><path d="M9.5 20v-6.5h5V20"></path></symbol>
+    <symbol id="icon-user" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.5"></circle><path d="M5.5 20c0-3.6 2.9-5.8 6.5-5.8s6.5 2.2 6.5 5.8"></path></symbol>
+  </svg>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#home" data-brand-attr="{brand}首页"><span class="brand-mark"><img src="./images/rabbit-mark.svg" alt=""></span><strong data-brand="{brand}"></strong></a>
+      <nav class="site-nav" data-str-attr="aria-label:nav.aria">
+        <a href="#home" data-nav="home" data-str="nav.home"></a>
+        <a href="#tools" data-nav="tools" data-str="nav.tools"></a>
+        <a href="#datasets" data-nav="datasets" data-str="nav.datasets"></a>
+        <a href="#help" data-nav="help" data-str="nav.help"></a>
+        <a href="#pricing" data-nav="pricing" data-str="nav.pricing"></a>
+        <a href="#about" data-nav="about" data-str="nav.about"></a>
+        <a href="#requests" data-nav="requests" data-str="nav.requests"></a>
+      </nav>
+      <div class="header-actions">
+        <button class="header-search" type="button" data-str-attr="aria-label:header.search;title:header.search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg></button>
+        <button class="header-icon" type="button" data-theme-toggle data-str-attr="aria-label:theme.to_dark;title:theme.to_dark"></button>
+        <button class="header-icon" type="button" data-share-open data-brand-attr="分享{brand}"><svg class="ui-icon" aria-hidden="true"><use href="#icon-share"></use></svg></button>
+        <span class="header-account" data-header-account><a class="header-login" href="#login" data-account-trigger data-str="header.login"></a><div class="account-menu" data-account-menu role="menu" hidden></div></span>
+        <button class="header-menu" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-drawer" data-str-attr="aria-label:nav.aria"><svg class="ui-icon" aria-hidden="true"><use href="#icon-menu"></use></svg></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="site-drawer" data-nav-drawer hidden>
+    <div class="site-drawer__backdrop" data-nav-close></div>
+    <section class="site-drawer__panel" id="site-drawer" role="dialog" aria-modal="true" data-str-attr="aria-label:nav.aria">
+      <header class="site-drawer__heading">
+        <strong data-brand="{brand}"></strong>
+        <button class="icon-button" type="button" data-nav-close data-str-attr="aria-label:common.close">×</button>
+      </header>
+      <nav class="site-drawer__nav">
+        <a href="#home" data-nav="home" data-str="nav.home"></a>
+        <a href="#tools" data-nav="tools" data-str="nav.tools"></a>
+        <a href="#datasets" data-nav="datasets" data-str="nav.datasets"></a>
+        <a href="#help" data-nav="help" data-str="nav.help"></a>
+        <a href="#pricing" data-nav="pricing" data-str="nav.pricing"></a>
+        <a href="#about" data-nav="about" data-str="nav.about"></a>
+        <a href="#requests" data-nav="requests" data-str="nav.requests"></a>
+      </nav>
+      <div class="site-drawer__actions">
+        <a class="button button--primary button--small" href="#login" data-drawer-login data-str="header.login"></a>
+        <a class="button button--outline button--small" href="#account" data-drawer-account hidden data-str="menu.account"></a>
+        <button class="site-drawer__share" type="button" data-share-open data-brand-attr="分享{brand}"><svg class="ui-icon" aria-hidden="true"><use href="#icon-share"></use></svg></button>
+      </div>
+    </section>
+  </div>
+
+  <nav class="mobile-tabs" data-mobile-tabs data-str-attr="aria-label:nav.aria">
+    <a href="#home" data-nav="home"><svg class="ui-icon" aria-hidden="true"><use href="#icon-home"></use></svg><span data-str="nav.home"></span></a>
+    <a href="#tools" data-nav="tools"><svg class="ui-icon" aria-hidden="true"><use href="#icon-grid"></use></svg><span data-str="nav.tools"></span></a>
+    <a href="#pricing" data-nav="pricing"><svg class="ui-icon" aria-hidden="true"><use href="#icon-wallet"></use></svg><span data-str="nav.pricing"></span></a>
+    <a href="#account" data-nav="account"><svg class="ui-icon" aria-hidden="true"><use href="#icon-user"></use></svg><span data-str="footer.account"></span></a>
+  </nav>
+
+  <div class="verify-bar" data-verify-bar hidden><span data-str="verify.bar"></span><a href="#verify" data-str="verify.bar_link"></a><button class="icon-button" type="button" data-verify-bar-close data-str-attr="aria-label:common.close">×</button></div>
+
+  <main id="app"></main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand"><span class="brand-mark brand-mark--small"><img src="./images/rabbit-mark.svg" alt=""></span><strong data-brand="{brand}"></strong><p data-str="footer.slogan"></p></div>
+      <div><h2 data-str="footer.product"></h2><a href="#tools" data-str="footer.all_tools"></a><a href="#pricing" data-str="footer.pricing"></a><a href="#help" data-str="footer.help_center"></a></div>
+      <div><h2 data-str="footer.users"></h2><a href="#account" data-str="footer.account"></a><a href="#account/entitlements" data-str="footer.entitlements"></a><a href="#account/orders" data-str="footer.orders"></a><a href="#account/invoices" data-str="footer.invoices"></a></div>
+      <div><h2 data-str="footer.legal"></h2><a href="#terms" data-str="footer.terms"></a><a href="#privacy" data-str="footer.privacy"></a></div>
+      <div><h2 data-str="footer.other"></h2><a href="#about?section=contact" data-str="footer.contact"></a><a href="#about" data-brand="关于{brand}"></a></div>
+    </div>
+    <div class="container footer-bottom"><span class="footer-bottom__left"><span data-brand="© 2026 {brand}"></span><a class="footer-icp" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer"><span data-str="footer.icp"></span></a></span><span data-str="footer.bottom_service"></span></div>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div class="share-modal" data-share-modal hidden>
+    <div class="share-modal__backdrop" data-share-close></div>
+    <section class="share-modal__card" role="dialog" aria-modal="true" aria-labelledby="share-modal-title">
+      <header class="share-modal__heading">
+        <div><p class="eyebrow" data-brand="分享{brand}"></p><h2 id="share-modal-title" data-str="share.title"></h2></div>
+        <button class="icon-button" type="button" data-share-close data-str-attr="aria-label:common.close">×</button>
+      </header>
+      <p class="share-modal__recommendation" data-brand="👍 给你安利一个宝藏网址「{brand}」——你调查，我出图，把调查数据整理成报告级专题图件！"></p>
+      <div class="share-modal__brand"><strong data-brand="{brand}"></strong><span data-str="share.brand_line"></span></div>
+      <div class="share-modal__link-row"><input type="url" data-share-link data-str-attr="aria-label:share.link_label" readonly><button class="button button--primary button--small" type="button" data-share-copy data-str="share.copy_link"></button></div>
+      <div class="share-modal__platforms"><span data-brand="分享{brand}"></span><a href="#" data-share-platform="wechat" data-str="share.wechat"></a></div>
+      <p class="share-modal__hint" data-str="share.hint"></p>
+      <div class="share-modal__earn" data-share-earn>
+        <div class="share-modal__earn-head"><h3 data-str="pricing.share_title"></h3><span class="badge" data-str="pricing.share_vip_badge"></span></div>
+        <p class="share-modal__earn-lede" data-str="pricing.share_give"></p>
+        <div class="share-modal__earn-actions">
+          <button class="button button--primary button--small" type="button" data-share-submit data-str="pricing.share_button"></button>
+          <a class="button button--outline button--small" href="#login" data-share-login data-str="pricing.share_login"></a>
+        </div>
+        <p class="status" data-share-status aria-live="polite"></p>
+        <p class="tool-tag" data-str="pricing.share_lifetime"></p>
+      </div>
+    </section>
+  </div>
+  <div class="qr-modal" data-qr-modal hidden>
+    <div class="qr-modal__backdrop" data-qr-close></div>
+    <section class="qr-modal__card" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title">
+      <header class="qr-modal__heading">
+        <div><p class="eyebrow" data-qr-eyebrow data-brand="{brand}"></p><h2 id="qr-modal-title" data-qr-title></h2></div>
+        <button class="icon-button" type="button" data-qr-close data-str-attr="aria-label:common.close">×</button>
+      </header>
+      <div class="qr-modal__body">
+        <div class="qr-modal__code" data-qr-code aria-live="polite"></div>
+        <p class="qr-modal__amount" data-qr-amount hidden><span data-str="pay.qr_amount"></span><strong data-qr-amount-value></strong></p>
+        <p class="qr-modal__note" data-qr-note></p>
+        <p class="qr-modal__status" data-qr-status aria-live="polite"></p>
+        <div class="qr-modal__actions"><button class="button button--primary button--small" type="button" data-qr-refresh hidden></button></div>
+        <div class="qr-modal__actions qr-modal__actions--extra" data-qr-extra></div>
+      </div>
+    </section>
+  </div>
+  <script src="./content/site-content.js?v=20261010"></script>
+  <script src="./runtime-config.js?v=20261010"></script>
+  <script src="./prototype-data.js"></script>
+  <script src="./prototype-bridge.js"></script>
+  <script src="./script.js?v=20261010" defer></script>
+  <script src="./prototype-shell.js" defer></script>
+</body>
+</html>
